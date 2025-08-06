@@ -1,6 +1,9 @@
 import asyncHandler from "../config/asyncHandler.js";
+import { generateToken } from "../config/generateToken.js";
 import { publishToQueue } from "../config/rabbitmq.js";
 import { redisClient } from "../index.js";
+import type { AuthenticatedRequest } from "../middleware/isAuth.js";
+import { User } from "../model/UserModel.js";
 
 export const loginUser = asyncHandler(async (req, res) => {
   const { email } = req.body;
@@ -51,5 +54,71 @@ export const verifyUser = asyncHandler(async (req, res) => {
     return;
   }
 
-  
+  const otpKey = `otp:${email}`;
+
+  const storedOtp = await redisClient.get(otpKey);
+
+  if (!storedOtp || storedOtp !== enteredOtp) {
+    res.status(400).json({
+      message: "Invalid or expired OTP",
+    });
+    return;
+  }
+
+  await redisClient.del(otpKey);
+
+  let user = await User.findOne({ email });
+
+  if (!user) {
+    const name = email.slice(0, 8);
+    user = await User.create({ name, email });
+  }
+
+  const token = generateToken(user);
+
+  res.json({
+    message: "User Verified",
+    user,
+    token,
+  });
 });
+
+export const myProfile = asyncHandler(async (req:AuthenticatedRequest, res) => {
+  const user = req.user
+  res.json(user)
+});
+
+export const updateName = asyncHandler(async (req:AuthenticatedRequest,res) => {
+
+  const user = await User.findById(req.user?._id)
+
+  if(!user){
+    res.status(404).json({
+      message:"Please Login"
+    })
+    return;
+  }
+
+  user.name = req.body.name;
+  await user.save()
+
+  const token = generateToken(user)
+
+  res.json({
+    message:"User Updated Successfully",
+    user,
+    token
+  })
+})
+
+export const getAllUsers = asyncHandler(async (req:AuthenticatedRequest,res) => {
+
+  const users = await User.find()
+  res.json(users)
+})
+
+export const getUser = asyncHandler(async (req:AuthenticatedRequest,res) => {
+
+  const user = await User.findById(req.params.id)
+  res.json(user)
+})
