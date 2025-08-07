@@ -10,6 +10,6 @@ router.post("/verify-user",verifyUser)
 router.get("/me",isAuth,myProfile)
 router.get("/user/all",isAuth,getAllUsers)
 router.get("/user/:id",getUser)
-router.post("/update/user",isAuth,updateName)
+router.post("/user/update",isAuth,updateName)
 
 export default router
