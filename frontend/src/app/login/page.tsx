@@ -1,21 +1,25 @@
 "use client";
 
-import { ArrowRight, Loader2 } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import React, { useState } from "react";
 import { TextEffect } from "../../../components/motion-primitives/text-effect";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import axios from "axios";
 import { toast } from "sonner";
+import { useAppData, user_service } from "@/context/AppContext";
+import Loading from "@/components/Loading";
 
 const Login = () => {
-  const [email, setEmail] = useState<string>("");
 
+  const [email, setEmail] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
   const router = useRouter();
+
+  const {isAuth,loading:userLoading} = useAppData()
 
   const handleSubmit = async (
     e: React.FormEvent<HTMLElement>
@@ -24,7 +28,7 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const { data } = await axios.post(`http://localhost:5000/api/v1/login`, {
+      const { data } = await axios.post(`${user_service}/api/v1/login`, {
         email,
       });
 
@@ -42,6 +46,9 @@ const Login = () => {
       setLoading(false);
     }
   };
+
+  if(userLoading) return <Loading/>
+  if(isAuth) return redirect("/chat")
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#0f1117] relative overflow-hidden px-4">
