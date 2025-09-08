@@ -14,3 +14,7 @@ const asyncHandler = (handler: RequestHandler): RequestHandler => {
 
 
 export default asyncHandler
+
+
+// In this case , asyncHandler takes a RequestHandler function as an argument and returns a new RequestHandler function that wraps th original handler with error handling logic.
+

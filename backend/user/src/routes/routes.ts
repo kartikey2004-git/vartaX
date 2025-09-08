@@ -2,6 +2,7 @@ import express from "express"
 import { getAllUsers, getUser, loginUser, myProfile, updateName, verifyUser } from "../controllers/userController.js"
 import { isAuth } from "../middleware/isAuth.js"
 
+// create router instance
 const router = express.Router()
 
 
