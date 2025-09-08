@@ -112,20 +112,24 @@ export const myProfile = asyncHandler(
 
 export const updateName = asyncHandler(
   async (req: AuthenticatedRequest, res) => {
+    // find user by user id from req.user which is injected by isAuth middleware
     const user = await User.findById(req.user?._id);
 
+    // if user doesn't exist, send 404 status code with message
     if (!user) {
-      res.status(404).json({
-        message: "Please Login",
-      });
-      return;
+      throw new ApiError(404, "User not found");
     }
 
+    // update user name
     user.name = req.body.name;
+
+    // save user
     await user.save();
 
+    // generate a token
     const token = generateToken(user);
 
+    // send response with user and token
     res.json({
       message: "User Updated Successfully",
       user,
@@ -136,12 +140,14 @@ export const updateName = asyncHandler(
 
 export const getAllUsers = asyncHandler(
   async (req: AuthenticatedRequest, res) => {
+    // get all users from database
     const users = await User.find();
     res.json(users);
   }
 );
 
 export const getUser = asyncHandler(async (req: AuthenticatedRequest, res) => {
+  // get user by id from req.params.id to fetch the data of a particular user
   const user = await User.findById(req.params.id);
   res.json(user);
 });
