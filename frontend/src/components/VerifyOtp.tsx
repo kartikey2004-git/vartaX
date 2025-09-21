@@ -13,7 +13,8 @@ import { useAppData, user_service } from "@/context/AppContext";
 import Loading from "./Loading";
 
 const VerifyOtp = () => {
-  const { isAuth, setIsAuth, setUser, loading: userLoading } = useAppData();
+
+  const { isAuth, setIsAuth, setUser, loading: userLoading , fetchChats , fetchUsers } = useAppData();
 
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -21,17 +22,27 @@ const VerifyOtp = () => {
 
   const [error, setError] = useState<string>("");
 
+  // state for resend otp button loading
   const [resendLoading, setResendLoading] = useState(false);
 
+
+  // state for timer after 60 seconds user can resend the otp
   const [timer, setTimer] = useState(60);
+
+
+  // ref for input fields jisse hum inputs ke beech mein switch kr skte hai , focus kr skte hai
 
   const inputRefs = useRef<Array<HTMLInputElement | null>>([]);
 
   const router = useRouter();
 
+  // we are going to use useSearchParams to get the email from the query params we need to wrap this component inside Suspense in the verify page
+
   const searchParams = useSearchParams();
 
   const email = searchParams.get("email") || "";
+
+  // timer chalayenge jab component mount hoga aur jab timer 0 se bada hoga tabhi chalega and har second mein timer ko 1 se kam karenge
 
   useEffect(() => {
     if (timer > 0) {
@@ -44,16 +55,22 @@ const VerifyOtp = () => {
 
   // console.log(timer);
 
+
+  // function to handle input change and move to next input field automatically
+
   const handleInputChange = (value: string, index: number): void => {
     if (value.length > 1) return;
     const newOtp = [...otp];
     newOtp[index] = value;
-    setOtp(newOtp);
+    setOtp(newOtp)
+    setError("")
 
     if (value && index < 5) {
       inputRefs.current[index + 1]?.focus();
     }
   };
+
+  // function to handle backspace key press and move to previous input field if current input field is empty
 
   const handleKeyDown = (
     index: number,
@@ -63,6 +80,8 @@ const VerifyOtp = () => {
       inputRefs.current[index - 1]?.focus();
     }
   };
+
+  // function to handle paste event and paste the otp in the input fields
 
   const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -78,6 +97,8 @@ const VerifyOtp = () => {
     }
   };
 
+  // function to handle form submit and verify the otp
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const otpString = otp.join("");
@@ -90,21 +111,32 @@ const VerifyOtp = () => {
     setError("");
     setLoading(true);
 
+    // Send a POST request to the backend to verify the otp
+    
     try {
       const { data } = await axios.post(`${user_service}/api/v1/verify-user`, {
         email,
         otp: otpString,
       });
-      toast(data.message);
+      toast.success(data.message);
+
+      // If successful, store the token in cookies expires in 15 days and update the user context
+
       Cookies.set("token", data.token, {
         expires: 15,
-        secure: false,
+        secure: false, // we have to host our app on AWS , so we got http in the beginning of the URL
         path: "/",
       });
+
       setOtp(["", "", "", "", "", ""]);
       inputRefs.current[0]?.focus();
       setUser(data.user);
       setIsAuth(true);
+
+      fetchChats() // problem solved ab jaise hi user verified hoga toh loggedIn users ki saari chat phirse fetch hongi
+
+      fetchUsers() // problem solved ab jaise hi user verified hoga toh all users ki saari details phirse fetch hongi
+
     } catch (error: any) {
       setError(error.response.data.message);
     } finally {
@@ -112,15 +144,19 @@ const VerifyOtp = () => {
     }
   };
 
+  // function to handle resetOTP after 60 seconds 
+
   const handleResendOtp = async () => {
     setResendLoading(true);
     setError("");
+
+    // Send a POST request to the backend to login through email which send reset otp again
 
     try {
       const { data } = await axios.post(`${user_service}/api/v1/login`, {
         email,
       });
-      toast(data.message);
+      toast.success(data.message);
       setTimer(60);
     } catch (error: any) {
       setError(error.response.data.message);
@@ -169,7 +205,7 @@ const VerifyOtp = () => {
                   type="text"
                   maxLength={1}
                   value={digit}
-                  className="w-12 h-12 text-white bg-transparent border border-gray-400 text-center text-xl font-bold focus:outline-none focus:ring-2 focus:ring-[#9f59ff] rounded-md"
+                  className="w-12 h-12 text-white bg-transparent border border-gray-400 text-center text-xl font-semibold focus:outline-none focus:ring-2 focus:ring-[#9f59ff] rounded-md"
                   onChange={(e) => handleInputChange(e.target.value, index)}
                   onKeyDown={(e) => handleKeyDown(index, e)}
                   onPaste={index === 0 ? handlePaste : undefined}
@@ -194,7 +230,7 @@ const VerifyOtp = () => {
                 : "bg-[#0f1117] hover:bg-[#1a1d25]"
             } text-white`}
           >
-            {loading ? "Sending Otp to your mail..." : "Verify"}
+            {loading ? "Verifying..." : "Verify"}
             <ArrowRight className="w-5 h-5" />
           </Button>
         </form>

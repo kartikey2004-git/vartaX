@@ -5,6 +5,7 @@ import { Suspense } from "react";
 const VerifyPage = () => {
   return (
     <div>
+      {/* Using Suspense to handle the loading state while VerifyOtp component is being loaded */}
       <Suspense fallback={<Loading />}>
         <VerifyOtp />
       </Suspense>
