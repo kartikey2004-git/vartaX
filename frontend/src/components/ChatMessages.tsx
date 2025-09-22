@@ -59,25 +59,26 @@ const ChatMessages = ({
                 >
                   {/* Message Bubble */}
                   <div
-                    className={`relative rounded-2xl px-4 py-2 max-w-xs sm:max-w-sm
-    ${
-      e.messageType === "image"
-        ? "" // no background for images
-        : `shadow-md backdrop-blur-md ${
-            isSentByMe
-              ? "text-white rounded-br-sm"
-              : "bg-white/10 text-white rounded-bl-sm"
-          }`
-    }`}
+                    className={`relative rounded-2xl px-4 py-2 max-w-xs sm:max-w-sm ${
+                      e.messageType === "image"
+                        ? ""
+                        : `shadow-md  backdrop-blur-md ${
+                            isSentByMe
+                              ? "text-white rounded-br-sm"
+                              : "bg-white/10 text-white rounded-bl-sm"
+                          }`
+                    }`}
                   >
                     {e.messageType === "image" && e.image && (
-                      <div className="relative group">
+                      <div className="relative group w-52 h-52">
+                        {" "}
+                        {/* fixed size wrapper */}
                         <Image
                           src={e.image.url}
                           alt="shared image"
-                          className="max-w-full h-auto rounded-xl shadow-md"
-                          width={300}
-                          height={300}
+                          className="w-full h-full object-cover rounded-xl shadow-md"
+                          width={200} 
+                          height={200} 
                         />
                       </div>
                     )}

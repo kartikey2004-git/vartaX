@@ -20,6 +20,7 @@ interface ChatSideBarProps {
   setSelectedUser: (userId: string | null) => void;
   handleLogout: () => void;
   createChat: (user: User) => void;
+  onlineUsers: string[];
 }
 
 const ChatSideBar = ({
@@ -34,6 +35,7 @@ const ChatSideBar = ({
   setSelectedUser,
   handleLogout,
   createChat,
+  onlineUsers,
 }: ChatSideBarProps) => {
   const [searchQuery, setsearchQuery] = useState("");
   return (
@@ -96,12 +98,21 @@ const ChatSideBar = ({
                   className="flex items-center gap-3 px-4 py-3 cursor-pointer hover:bg-[#323c43] transition-colors group"
                   onClick={() => createChat(u)}
                 >
-                  <div className="w-11 h-11 rounded-full flex items-center justify-center group-hover:scale-105 transition-transform">
+                  {/* Avatar + Online dot */}
+                  <div className="relative w-11 h-11 rounded-full flex items-center justify-center group-hover:scale-105 transition-transform">
                     <UserCircle className="w-6 h-6 text-gray-300" />
+                    {onlineUsers.includes(u._id) && (
+                      <span className="absolute top-6 right-0.5 w-3.5 h-3.5 rounded-full bg-green-500 border-2 border-gray-900" />
+                    )}
                   </div>
+
+                  {/* Name + Status */}
                   <div className="flex-1 min-w-0">
-                    <p className=" font-normal text-gray-100 truncate">
+                    <p className="font-normal text-gray-100 truncate">
                       {u.name}
+                    </p>
+                    <p className="text-xs text-gray-400 mt-0.5">
+                      {onlineUsers.includes(u._id) ? "Online" : "Offline"}
                     </p>
                   </div>
                 </div>
@@ -121,16 +132,19 @@ const ChatSideBar = ({
                     setSelectedUser(chat.chat._id);
                     setSidebarOpen(false);
                   }}
-                  className={`flex items-center gap-3 px-4 py-3 cursor-pointer transition-all duration-200 ${
-                    isSelected
-                      ? "bg-gray-800 text-white"
-                      : " transition-colors duration-200"
+                  className={`flex items-center gap-3 px-4 py-3 cursor-pointer transition-colors duration-200 ${
+                    isSelected ? "bg-gray-800" : "hover:bg-[#323c43]"
                   }`}
                 >
-                  <div className="w-11 h-11 rounded-full flex items-center justify-center">
+                  {/* Avatar + Online dot */}
+                  <div className="relative w-11 h-11 rounded-full flex items-center justify-center">
                     <UserCircle className="w-6 h-6 text-gray-300" />
+                    {onlineUsers.includes(chat.user._id) && (
+                      <span className="absolute top-6 right-0.5 w-3.5 h-3.5 rounded-full bg-green-500 border-2 border-gray-900" />
+                    )}
                   </div>
 
+                  {/* Chat details */}
                   <div className="flex-1 min-w-0">
                     <div className="flex justify-between items-center">
                       <p className="font-normal text-gray-100 truncate">
@@ -142,8 +156,9 @@ const ChatSideBar = ({
                     </p>
                   </div>
 
+                  {/* Unseen count */}
                   {unseenCount > 0 && (
-                    <div className="ml-2 text-green text-xs font-bold rounded-full min-w-[20px] h-5 flex items-center justify-center px-1 border">
+                    <div className="ml-2 bg-green-600 text-white text-xs font-bold rounded-full min-w-[20px] h-5 flex items-center justify-center px-1">
                       {unseenCount > 99 ? "99+" : unseenCount}
                     </div>
                   )}
@@ -152,9 +167,9 @@ const ChatSideBar = ({
             })}
           </div>
         ) : (
-          <div className="flex flex-col items-center justify-center h-full text-center text-gray-400">
+          <div className="flex flex-col items-center justify-center h-full text-center text-gray-400 px-4">
             <p className="text-lg font-medium">No chats yet</p>
-            <p className="mt-2 text-sm">Start a new chat to begin messaging</p>
+            <p className="mt-1 text-sm">Start a new chat to begin messaging</p>
           </div>
         )}
       </div>

@@ -4,6 +4,7 @@ import type { AuthenticatedRequest } from "../middlewares/isAuth.js";
 import { Chat } from "../models/ChatModel.js";
 import { Messages } from "../models/MessagesModel.js";
 import { ApiError } from "../utils/ApiError.js";
+import { getRecieverSocketId, io } from "../config/socket.js";
 
 // controller to create a new chat between two users
 
@@ -208,12 +209,23 @@ export const sendMessage = asyncHandler(
     }
 
     // Need to setup socket
+    const recieverSocketId = getRecieverSocketId(otherUserId.toString());
+
+    let isRecieverInChatRoom = false;
+
+    if (recieverSocketId) {
+      const recieverSocket = io.sockets.sockets.get(recieverSocketId);
+
+      if (recieverSocket && recieverSocket.rooms.has(chatId)) {
+        isRecieverInChatRoom = true;
+      }
+    }
 
     let messageData: any = {
       chatId: chatId,
       sender: senderId,
-      seen: false,
-      seenAt: undefined,
+      seen: isRecieverInChatRoom,
+      seenAt: isRecieverInChatRoom ? new Date() : undefined,
     };
 
     // if image is present then set the image url which we recieved from cloudinary and public id in the message data
@@ -256,6 +268,25 @@ export const sendMessage = asyncHandler(
     );
 
     // emit to sockets
+    io.to(chatId).emit("newMessage", savedMessage);
+
+    if (recieverSocketId) {
+      io.to(recieverSocketId).emit("newMessage", savedMessage);
+    }
+
+    const senderSocketId = getRecieverSocketId(senderId.toString());
+
+    if (senderSocketId) {
+      io.to(senderSocketId).emit("newMessage", savedMessage);
+    }
+
+    if (isRecieverInChatRoom && senderSocketId) {
+      io.to(senderSocketId).emit("messagesSeen", {
+        chatId: chatId,
+        seenBy: otherUserId,
+        messageIds: [savedMessage._id],
+      });
+    }
 
     res.status(201).json({
       message: savedMessage,
@@ -368,9 +399,21 @@ export const getMessagesByChat = asyncHandler(
         return;
       }
 
-      // socket work here 
-      
+      // socket work here
+
       // jaise maan lo user is already in same chat mein hai as ki wo online hai , to usko socket se mark as seen ---> krdenge message ko
+
+      if (messagesToMarkseen.length > 0) {
+        const otherUserSocketId = getRecieverSocketId(otherUserId.toString());
+
+        if (otherUserSocketId) {
+          io.to(otherUserSocketId).emit("messagesSeen", {
+            chatId: chatId,
+            seenBy: userId,
+            messageIds: messagesToMarkseen.map((msg) => msg._id),
+          });
+        }
+      }
 
       res.json({
         messages,

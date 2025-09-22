@@ -7,9 +7,17 @@ interface ChatHeaderProps {
   user: User | null;
   setSidebarOpen: (open: boolean) => void;
   isTyping: boolean;
+  onlineUsers: string[];
 }
 
-const ChatHeader = ({ user, setSidebarOpen, isTyping }: ChatHeaderProps) => {
+const ChatHeader = ({
+  user,
+  setSidebarOpen,
+  isTyping,
+  onlineUsers,
+}: ChatHeaderProps) => {
+  const isOnlineUser = user && onlineUsers.includes(user._id);
+
   return (
     <>
       {/* mobile menu toggle button jisse sidebar ko open krne wale hai*/}
@@ -33,15 +41,59 @@ const ChatHeader = ({ user, setSidebarOpen, isTyping }: ChatHeaderProps) => {
                   <UserCircle className="w-6 h-6 text-white/80" />
                 </div>
                 {/* online status dot */}
+                {isOnlineUser && (
+                  <span className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-green-500 border-2 border-gray-800">
+                    <span className="absolute inset-0 rounded-full bg-green-500 animate-ping opacity-75"></span>
+                  </span>
+                )}
+                {/* {isOnlineUser ? (
+                  <span className="absolute -bottom-2 left-13 text-sm font-normal">
+                    Online
+                  </span>
+                ) : (
+                  <span className="absolute -bottom-2.5 left-13 text-sm font-normal">
+                    Offline
+                  </span>
+                )} */}
               </div>
 
               {/* User Info */}
               <div className="flex-1 min-w-0">
-                <h2 className="text-white truncate">
-                  {user?.name}
-                </h2>
+                <h2 className="text-white truncate">{user?.name}</h2>
+
+                {/* to show typing status */}
+                <div className="flex items-center gap-2">
+                  {isTyping ? (
+                    <div className="flex items-center gap-2 text-sm">
+                      <div className="flex gap-1">
+                        <div className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-bounce"></div>
+                        <div
+                          className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-bounce"
+                          style={{ animationDelay: "0.1s" }}
+                        ></div>
+                        <div
+                          className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-bounce"
+                          style={{ animationDelay: "0.2s" }}
+                        ></div>
+                      </div>
+
+                      <span className="text-blue-500 font-medium">
+                        typing...
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-2">
+                      <span
+                        className={`text-sm font-medium ${
+                          isOnlineUser ? "text-green-500" : "text-gray-400"
+                        }`}
+                      >
+                        {isOnlineUser ? "Online" : "Offline"}
+                      </span>
+                    </div>
+                  )}
+                </div>
               </div>
-              {/* to show typing status */}
             </>
           ) : (
             <div className="flex items-center gap-3">
