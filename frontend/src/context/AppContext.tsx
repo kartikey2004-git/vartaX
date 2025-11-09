@@ -11,8 +11,8 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import { toast } from "sonner";
 
-export const user_service = "http://16.171.198.214:5000";
-export const chat_service = "http://16.171.198.214:5002";
+export const user_service = "http://3.26.12.238:5000";
+export const chat_service = "http://3.26.12.238:5002";
 
 // interface for user
 export interface User {
