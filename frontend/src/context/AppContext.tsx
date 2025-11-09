@@ -11,8 +11,8 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import { toast } from "sonner";
 
-export const user_service = "http://localhost:5000";
-export const chat_service = "http://localhost:5002";
+export const user_service = "http://16.171.198.214:5000";
+export const chat_service = "http://16.171.198.214:5002";
 
 // interface for user
 export interface User {
@@ -160,7 +160,21 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   return (
     // provide the context to children components
 
-    <AppContext.Provider value={{ user, setIsAuth, setUser, isAuth, loading , logoutUser , fetchChats , fetchUsers , chats,users , setChats}}>
+    <AppContext.Provider
+      value={{
+        user,
+        setIsAuth,
+        setUser,
+        isAuth,
+        loading,
+        logoutUser,
+        fetchChats,
+        fetchUsers,
+        chats,
+        users,
+        setChats,
+      }}
+    >
       {children}
     </AppContext.Provider>
   );
@@ -178,7 +192,4 @@ export const useAppData = (): AppContextType => {
 
 // but there is problem hai ki agar user loggedOut hai  toh fetchChats() , fetchUsers()dono mein se koi bhi call hi nahi hoga.
 
-
-// and then agar hum dobara login krte hai by adding email , jaise hi user verify ho jayega , tab bhi fetchUsers() , fetchChats() call nhi hoga without reload , data empty rhega and humein manual reload krna pad rha hai to call both fetchUsers() , fetchChats(). 
-
-
+// and then agar hum dobara login krte hai by adding email , jaise hi user verify ho jayega , tab bhi fetchUsers() , fetchChats() call nhi hoga without reload , data empty rhega and humein manual reload krna pad rha hai to call both fetchUsers() , fetchChats().

@@ -2,7 +2,6 @@
 
 import { ArrowRight } from "lucide-react";
 import React, { useState } from "react";
-import { TextEffect } from "../../../components/motion-primitives/text-effect";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -88,13 +87,11 @@ const Login = () => {
 
       <div className="w-full lg:w-2/5 flex items-center justify-center bg-[#161b22]/90 px-6 py-12 lg:px-12">
         <div className="w-full max-w-md">
-          <TextEffect
-            per="char"
-            preset="fade"
+          <div
             className="text-gray-400 mt-3 text-base text-center"
           >
             Enter your email to continue your journey
-          </TextEffect>
+          </div>
 
           <div className="flex items-center my-6">
             <div className="flex-1 border-t border-gray-700"></div>
