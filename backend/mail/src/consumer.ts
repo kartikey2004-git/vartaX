@@ -38,6 +38,7 @@ export const startSendOTPConsumer = async () => {
           const transporter = nodemailer.createTransport({
             host: "smtp.gmail.com",
             port: 465,
+            secure: true,
             auth: {
               user: process.env.SMTP_USER,
               pass: process.env.SMTP_PASS,
@@ -46,7 +47,7 @@ export const startSendOTPConsumer = async () => {
 
           // send the email using the transporter
           await transporter.sendMail({
-            from: "vartaX",
+            from: `"vartaX" <${process.env.SMTP_USER}>`,
             to,
             subject,
             text: body,
@@ -58,6 +59,7 @@ export const startSendOTPConsumer = async () => {
           channel.ack(msg);
         } catch (error) {
           console.log("Failed to send OTP", error);
+          channel.nack(msg, false, true); // requeue
         }
       }
     });
