@@ -17,6 +17,7 @@ export const startSendOTPConsumer = async () => {
       port: 5672,
       username: process.env.RABBITMQ_USERNAME,
       password: process.env.RABBITMQ_PASSWORD,
+      vhost: "vlaacocm" 
     });
 
     // create a channel of about RabbitMQ connection
