@@ -11,14 +11,7 @@ export const startSendOTPConsumer = async () => {
 
     // connect to RabbitMQ server using amqplib library
     
-    const connection = await amqp.connect({
-      protocol: "amqp",
-      hostname: process.env.RABBITMQ_HOST,
-      port: 5672,
-      username: process.env.RABBITMQ_USERNAME,
-      password: process.env.RABBITMQ_PASSWORD,
-      vhost: "vlaacocm" 
-    });
+    const connection = await amqp.connect(process.env.RABBITMQ_URL!);
 
     // create a channel of about RabbitMQ connection
     const channel = await connection.createChannel();
