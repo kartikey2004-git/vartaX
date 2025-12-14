@@ -1,11 +1,11 @@
 import express from "express";
-import dotenv from "dotenv"
+import dotenv from "dotenv";
+
+dotenv.config();
 import { startSendOTPConsumer } from "./consumer.js";
 
-dotenv.config()
-
 // start the consumer to listen for messages
-startSendOTPConsumer()
+startSendOTPConsumer();
 
 // create express app
 const app = express();

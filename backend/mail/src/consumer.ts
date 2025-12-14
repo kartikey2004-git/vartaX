@@ -1,16 +1,19 @@
 import amqp from "amqplib";
-import nodemailer from "nodemailer";
-import dotenv from "dotenv";
+
+import { sendMail } from "./utils/sendMail.js"
 
 // Load environment variables from .env file
-dotenv.config();
+
 
 // Function to start the RabbitMQ consumer for sending OTP emails
 export const startSendOTPConsumer = async () => {
   try {
+    if (!process.env.RABBITMQ_URL) {
+      throw new Error("RABBITMQ_URL missing");
+    }
 
     // connect to RabbitMQ server using amqplib library
-    
+
     const connection = await amqp.connect(process.env.RABBITMQ_URL!);
 
     // create a channel of about RabbitMQ connection
@@ -33,26 +36,13 @@ export const startSendOTPConsumer = async () => {
       try {
         const { to, subject, body } = JSON.parse(msg.content.toString());
 
-        console.log("📩 Sending OTP mail to:", to);
+        console.log("📩 Sending OTP mail via Resend to:", to);
 
-        const transporter = nodemailer.createTransport({
-          host: "smtp.gmail.com",
-          port: 465,
-          secure: true,
-          auth: {
-            user: process.env.SMTP_USER,
-            pass: process.env.SMTP_PASS,
-          },
-        });
+        await sendMail(to, subject, body);
 
-        const info = await transporter.sendMail({
-          from: `"vartaX" <${process.env.SMTP_USER}>`,
-          to,
-          subject,
-          text: body,
-        });
+      
 
-        console.log("✅ OTP mail sent:", info.messageId);
+        console.log("✅ OTP mail sent:");
         channel.ack(msg);
       } catch (err) {
         console.error("❌ Failed to send OTP", err);
