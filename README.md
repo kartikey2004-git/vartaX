@@ -1,4 +1,4 @@
-# VartaX — Real-time chat microservices
+# ✨ VartaX — Real-time chat microservices
 
 Tech Stack
 
