@@ -11,10 +11,9 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import { toast } from "sonner";
 
-export const user_service =
-  process.env.NEXT_PUBLIC_USER_SERVICE_URL || "http://3.26.12.238:5000";
-export const chat_service =
-  process.env.NEXT_PUBLIC_CHAT_SERVICE_URL || "http://3.26.12.238:5002";
+export const user_service = process.env.NEXT_PUBLIC_USER_SERVICE_URL || "";
+
+export const chat_service = process.env.NEXT_PUBLIC_CHAT_SERVICE_URL || "";
 
 // interface for user
 export interface User {
