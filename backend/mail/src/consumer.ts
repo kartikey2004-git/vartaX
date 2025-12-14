@@ -28,39 +28,35 @@ export const startSendOTPConsumer = async () => {
 
     // consume messages from the queue
     channel.consume(queueName, async (msg) => {
-      if (msg) {
-        try {
+      if (!msg) return;
 
-          // parse the message content
-          const { to, subject, body } = JSON.parse(msg.content.toString());
+      try {
+        const { to, subject, body } = JSON.parse(msg.content.toString());
 
-          // create a nodemailer transporter using SMTP
-          const transporter = nodemailer.createTransport({
-            host: "smtp.gmail.com",
-            port: 465,
-            secure: true,
-            auth: {
-              user: process.env.SMTP_USER,
-              pass: process.env.SMTP_PASS,
-            },
-          });
+        console.log("📩 Sending OTP mail to:", to);
 
-          // send the email using the transporter
-          await transporter.sendMail({
-            from: `"vartaX" <${process.env.SMTP_USER}>`,
-            to,
-            subject,
-            text: body,
-          });
+        const transporter = nodemailer.createTransport({
+          host: "smtp.gmail.com",
+          port: 465,
+          secure: true,
+          auth: {
+            user: process.env.SMTP_USER,
+            pass: process.env.SMTP_PASS,
+          },
+        });
 
-          console.log(`OTP mail sent to ${to}`);
+        const info = await transporter.sendMail({
+          from: `"vartaX" <${process.env.SMTP_USER}>`,
+          to,
+          subject,
+          text: body,
+        });
 
-          // acknowledge the message as processed
-          channel.ack(msg);
-        } catch (error) {
-          console.log("Failed to send OTP", error);
-          channel.nack(msg, false, true); // requeue
-        }
+        console.log("✅ OTP mail sent:", info.messageId);
+        channel.ack(msg);
+      } catch (err) {
+        console.error("❌ Failed to send OTP", err);
+        channel.nack(msg, false, true);
       }
     });
   } catch (error) {
