@@ -14,29 +14,18 @@ Tech Stack
 
 Key Features
 
-- **Real-time chat (Socket.IO)**
+- **Real-time chat (Socket.IO)** : Implements bidirectional, low-latency messaging between clients and the chat service using Socket.IO.
+  
 
-  - Implements bidirectional, low-latency messaging between clients and the chat service using Socket.IO.
-  - Server and client pieces live in the chat service and frontend socket context.
+- **User authentication (JWT)**: Stateless authentication using JSON Web Tokens; tokens created and verified by the user service middleware.
 
-- **User authentication (JWT)**
+- **Persistent message storage (MongoDB + Mongoose)**: Chats and messages are persisted with Mongoose models.
 
-  - Stateless authentication using JSON Web Tokens; tokens created and verified by the user service middleware.
+- **File/image uploads (Cloudinary + Multer)** : Image uploads handled via Multer and stored in Cloudinary.
 
-- **Persistent message storage (MongoDB + Mongoose)**
+- **Background email (RabbitMQ + Nodemailer)** : OTP/email send requests are queued and consumed by the mail service using RabbitMQ and `nodemailer`.
 
-  - Chats and messages are persisted with Mongoose models.
-
-- **File/image uploads (Cloudinary + Multer)**
-
-  - Image uploads handled via Multer and stored in Cloudinary.
-
-- **Background email (RabbitMQ + Nodemailer)**
-
-  - OTP/email send requests are queued and consumed by the mail service using RabbitMQ and `nodemailer`.
-
-- **REST API endpoints for chat flows**
-  - Chat endpoints and controllers implement messaging flows and user lookups.
+- **REST API endpoints for chat flows** : Chat endpoints and controllers implement messaging flows and user lookups.
 
 Architecture Overview
 
