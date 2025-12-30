@@ -40,18 +40,21 @@ export const startSendOTPConsumer = async () => {
         const transporter = nodemailer.createTransport({
           host: "smtp.gmail.com",
           port: 587,
-          secure: true,
+          secure: false,
           auth: {
             user: process.env.USER,
-            pass: process.env.PASSWORD
-          }
+            pass: process.env.PASSWORD,
+          },
+          tls: {
+            rejectUnauthorized: false,
+          },
         });
 
         await transporter.sendMail({
-          from: '"VartaX" kartikeybhatnagar247@gmail.com',
-          to: to,
-          subject: subject,
-          text: body
+          from: `"VartaX" <${process.env.USER}>`,
+          to,
+          subject,
+          text: body,
         });
       
 
