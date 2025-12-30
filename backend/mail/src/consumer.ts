@@ -1,6 +1,5 @@
 import amqp from "amqplib";
-
-import { sendMail } from "./utils/sendMail.js"
+import nodemailer from "nodemailer"
 
 // Load environment variables from .env file
 
@@ -36,16 +35,30 @@ export const startSendOTPConsumer = async () => {
       try {
         const { to, subject, body } = JSON.parse(msg.content.toString());
 
-        console.log("📩 Sending OTP mail via Resend to:", to);
+        console.log("Sending OTP mail via Resend to:", to);
 
-        await sendMail(to, subject, body);
+        const transporter = nodemailer.createTransport({
+          host: "smtp.gmail.com",
+          port: 587,
+          secure: true,
+          auth: {
+            user: process.env.USER,
+            pass: process.env.PASSWORD
+          }
+        });
 
+        await transporter.sendMail({
+          from: '"VartaX" kartikeybhatnagar247@gmail.com',
+          to: to,
+          subject: subject,
+          text: body
+        });
       
 
-        console.log("✅ OTP mail sent:");
+        console.log("OTP mail sent:");
         channel.ack(msg);
       } catch (err) {
-        console.error("❌ Failed to send OTP", err);
+        console.error("Failed to send OTP", err);
         channel.nack(msg, false, true);
       }
     });
