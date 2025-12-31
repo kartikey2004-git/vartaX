@@ -24,7 +24,7 @@ const ChatHeader = ({
 
       <div className="sm:hidden fixed top-3 right-3 z-30">
         <Button
-          className="p-2 rounded-lg bg-white/10 backdrop-blur-md border border-white/20 shadow-md hover:bg-white/20 transition-all"
+          className="p-2 rounded-lg bg-white/10 backdrop-blur-md border border-white/20 shadow-md hover:bg-white/20 transition-all mr-4 mt-6"
           onClick={() => setSidebarOpen(true)}
         >
           <Menu className="w-4 h-4 text-white/80" />

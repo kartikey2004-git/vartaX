@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
 "use client";
+
 import { Button } from "@/components/ui/button";
 import { ArrowRight, ChevronLeft } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
@@ -13,8 +15,14 @@ import { useAppData, user_service } from "@/context/AppContext";
 import Loading from "./Loading";
 
 const VerifyOtp = () => {
-
-  const { isAuth, setIsAuth, setUser, loading: userLoading , fetchChats , fetchUsers } = useAppData();
+  const {
+    isAuth,
+    setIsAuth,
+    setUser,
+    loading: userLoading,
+    fetchChats,
+    fetchUsers,
+  } = useAppData();
 
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -25,10 +33,8 @@ const VerifyOtp = () => {
   // state for resend otp button loading
   const [resendLoading, setResendLoading] = useState(false);
 
-
   // state for timer after 60 seconds user can resend the otp
   const [timer, setTimer] = useState(60);
-
 
   // ref for input fields jisse hum inputs ke beech mein switch kr skte hai , focus kr skte hai
 
@@ -55,15 +61,14 @@ const VerifyOtp = () => {
 
   // console.log(timer);
 
-
   // function to handle input change and move to next input field automatically
 
   const handleInputChange = (value: string, index: number): void => {
     if (value.length > 1) return;
     const newOtp = [...otp];
     newOtp[index] = value;
-    setOtp(newOtp)
-    setError("")
+    setOtp(newOtp);
+    setError("");
 
     if (value && index < 5) {
       inputRefs.current[index + 1]?.focus();
@@ -112,7 +117,7 @@ const VerifyOtp = () => {
     setLoading(true);
 
     // Send a POST request to the backend to verify the otp
-    
+
     try {
       const { data } = await axios.post(`${user_service}/api/v1/verify-user`, {
         email,
@@ -133,10 +138,9 @@ const VerifyOtp = () => {
       setUser(data.user);
       setIsAuth(true);
 
-      fetchChats() // problem solved ab jaise hi user verified hoga toh loggedIn users ki saari chat phirse fetch hongi
+      fetchChats(); // problem solved ab jaise hi user verified hoga toh loggedIn users ki saari chat phirse fetch hongi
 
-      fetchUsers() // problem solved ab jaise hi user verified hoga toh all users ki saari details phirse fetch hongi
-
+      fetchUsers(); // problem solved ab jaise hi user verified hoga toh all users ki saari details phirse fetch hongi
     } catch (error: any) {
       setError(error.response.data.message);
     } finally {
@@ -144,7 +148,7 @@ const VerifyOtp = () => {
     }
   };
 
-  // function to handle resetOTP after 60 seconds 
+  // function to handle resetOTP after 60 seconds
 
   const handleResendOtp = async () => {
     setResendLoading(true);
@@ -169,10 +173,10 @@ const VerifyOtp = () => {
   if (isAuth) redirect("/chat");
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-[#0f1117] text-foreground">
-      <div className="absolute w-96 h-96 rounded-full bg-[#1f6feb]/30 blur-3xl animate-pulse -z-10"></div>
+    <div className="flex justify-center items-center min-h-screen bg-[#0f1117] text-foreground px-3 sm:px-0">
+      <div className="absolute w-72 h-72 sm:w-96 sm:h-96 rounded-full bg-[#1f6feb]/30 blur-3xl animate-pulse -z-10"></div>
 
-      <div className="w-full max-w-md bg-[#161b22]/90 rounded-3xl p-10 shadow-2xl border border-white/10 backdrop-blur-md transition-all">
+      <div className="w-full max-w-md bg-[#161b22]/90 rounded-3xl p-6 sm:p-10 shadow-2xl border border-white/10 backdrop-blur-md transition-all">
         <div className="text-center mb-8 relative">
           <Button
             onClick={() => router.push("/login")}
@@ -180,22 +184,27 @@ const VerifyOtp = () => {
           >
             <ChevronLeft />
           </Button>
-          <h1 className="text-3xl font-semibold text-white text-center mb-3">
+
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-medium text-white mb-3">
             Verify Your Email
           </h1>
-          <p className="text-center text-gray-400 mb-6">
+
+          <p className="text-sm sm:text-base text-gray-400">
             We’ve sent a 6-digit code to{" "}
-            <span className="text-md text-white">{email}</span>
+            <span className="text-white">{email}</span>
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="flex flex-col gap-2">
-            <Label className="text-center text-gray-400 font-semibold mb-6">
+            <Label className="text-center text-gray-400 font-semibold mb-4">
               Enter your 6 digit OTP here
             </Label>
 
-            <div className="flex justify-between mb-8" onPaste={handlePaste}>
+            <div
+              className="flex justify-between gap-2 sm:gap-3 mb-6"
+              onPaste={handlePaste}
+            >
               {otp.map((digit, index) => (
                 <Input
                   key={index}
@@ -205,7 +214,7 @@ const VerifyOtp = () => {
                   type="text"
                   maxLength={1}
                   value={digit}
-                  className="w-12 h-12 text-white bg-transparent border border-gray-400 text-center text-xl font-semibold focus:outline-none focus:ring-2 focus:ring-[#9f59ff] rounded-md"
+                  className="w-10 h-10 sm:w-12 sm:h-12 text-white bg-transparent border border-gray-400 text-center text-lg sm:text-xl font-normal focus:outline-none focus:ring-2 focus:ring-[#9f59ff] rounded-md"
                   onChange={(e) => handleInputChange(e.target.value, index)}
                   onKeyDown={(e) => handleKeyDown(index, e)}
                   onPaste={index === 0 ? handlePaste : undefined}
@@ -215,8 +224,8 @@ const VerifyOtp = () => {
           </div>
 
           {error && (
-            <div className="bg-red-900 border-red-700 rounded-lg p-3">
-              <p className="text-red-300 text-md text-center">{error}</p>
+            <div className="bg-red-900 border border-red-700 rounded-lg p-3">
+              <p className="text-red-300 text-sm text-center">{error}</p>
             </div>
           )}
 
@@ -224,18 +233,18 @@ const VerifyOtp = () => {
             variant="default"
             type="submit"
             disabled={loading}
-            className={`w-full py-3 rounded-md transition duration-200 ${
+            className={`w-full py-3 rounded-md transition duration-200 font-normal ${
               loading
                 ? "bg-gray-600 cursor-not-allowed"
                 : "bg-[#0f1117] hover:bg-[#1a1d25]"
             } text-white`}
           >
             {loading ? "Verifying..." : "Verify"}
-            <ArrowRight className="w-5 h-5" />
+            <ArrowRight className="w-5 h-5 ml-2" />
           </Button>
         </form>
 
-        <div className="relative mt-6 h-20 w-full">
+        <div className="relative mt-6">
           <p className="text-gray-400 text-sm mb-2 text-center">
             Didn&apos;t receive the code?
           </p>
@@ -245,13 +254,15 @@ const VerifyOtp = () => {
               Resend code in {timer}s
             </p>
           ) : (
-            <Button
-              className="absolute bottom-0 right-0 bg-[#0f1117] hover:bg-[#1a1d25] text-white font-medium text-sm disabled:opacity-50"
-              disabled={resendLoading}
-              onClick={handleResendOtp}
-            >
-              {resendLoading ? "Sending..." : "Resend Code"}
-            </Button>
+            <div className="flex justify-center">
+              <Button
+                className="bg-[#0f1117] hover:bg-[#1a1d25] text-white text-sm font-normal"
+                disabled={resendLoading}
+                onClick={handleResendOtp}
+              >
+                {resendLoading ? "Sending..." : "Resend Code"}
+              </Button>
+            </div>
           )}
         </div>
       </div>

@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
 "use client";
 
 import { User } from "@/context/AppContext";
@@ -52,7 +53,7 @@ const ChatSideBar = ({
         <div className="flex items-center gap-2">
           <Button
             onClick={() => setShowAllUsers((prev) => !prev)}
-            className="p-2 rounded-full hover:bg-gray-800 transition-all duration-200 bg-gray-700"
+            className="p-2 rounded-lg bg-white/10 backdrop-blur-md border border-white/20 shadow-md hover:bg-white/20 transition-all"
           >
             {showAllUsers ? (
               <X className="w-5 h-5 text-gray-300" />
@@ -63,7 +64,7 @@ const ChatSideBar = ({
 
           <Button
             onClick={() => setSidebarOpen(false)}
-            className="sm:hidden p-2 rounded-full hover:bg-gray-800 transition-all duration-200 bg-gray-700"
+            className="sm:hidden p-2 rounded-lg bg-white/10 backdrop-blur-md border border-white/20 shadow-md hover:bg-white/20 transition-all"
           >
             <X className="w-5 h-5 text-gray-300" />
           </Button>
