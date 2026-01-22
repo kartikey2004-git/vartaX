@@ -61,16 +61,16 @@ const Login = () => {
           className="absolute inset-0"
           style={{
             backgroundImage: `
-          linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px)
+          linear-gradient(rgba(0,0,0,0.08) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(0,0,0,0.08) 1px, transparent 1px)
         `,
             backgroundSize: "50px 50px",
           }}
         />
         <div className="relative z-10 max-w-2xl text-center lg:text-left">
           <h1 className="mb-6 text-4xl font-light leading-tight tracking-tighter md:text-5xl">
-            <span className="text-foreground">VartaX</span> <br />
-            <span className="font-normal text-muted-foreground">
+            <span className="font-normal  text-foreground">VartaX</span> <br />
+            <span className="font-normal text-foreground">
               Always Connected
             </span>
           </h1>
