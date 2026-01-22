@@ -1,44 +1,21 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 const Loading = () => {
-  const [progress, setProgress] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 100) {
-          clearInterval(interval);
-          return 100;
-        }
-        return prev + 1;
-      });
-    }, 25); // speed of loading
-
-    return () => clearInterval(interval);
-  }, []);
-
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-[#0f1117] px-4">
-      <div className="flex flex-col items-center gap-6">
-        <h1 className="text-white tracking-wide">
-          <span className="text-3xl sm:text-4xl md:text-5xl font-normal">
-            Vartax
-          </span>
+    <div className="fixed inset-0 flex items-center justify-center bg-background">
+      <div className="flex flex-col items-center gap-6 w-full max-w-xs px-6">
+        <h1 className="text-foreground tracking-wide text-4xl font-normal pulse-soft">
+          Vartax
         </h1>
 
-        <div className="w-64 sm:w-72 md:w-80 h-[2px] bg-white/10 rounded-full overflow-hidden">
-          <div
-            className="h-full bg-[#2596be] transition-all duration-200"
-            style={{ width: `${progress}%` }}
-          />
+        <div className="relative w-full h-[2px] bg-border/40 overflow-hidden rounded-full">
+          <div className="absolute inset-0 shimmer" />
         </div>
 
-        <p className="text-gray-400 text-sm sm:text-base">{progress}%</p>
-
-        <p className="text-xs sm:text-sm text-gray-500 mt-2 flex items-center gap-1">
-          🔒 End-to-end secure chats
+        <p className="text-md text-muted-foreground/70 flex items-center gap-1">
+          End-to-end secure chats
         </p>
       </div>
     </div>

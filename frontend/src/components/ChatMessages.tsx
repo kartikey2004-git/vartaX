@@ -40,7 +40,7 @@ const ChatMessages = ({
     <div className="flex-1 overflow-hidden">
       <div className="h-full max-h-[calc(100vh-215px)] overflow-y-auto px-4 py-3 space-y-3 scrollbar-hide">
         {!selectedUser ? (
-          <p className="text-white/50 text-center mt-20 text-sm">
+          <p className="text-muted-foreground text-center mt-20 text-sm">
             Please select a user to start chatting
           </p>
         ) : (
@@ -57,37 +57,35 @@ const ChatMessages = ({
                     isSentByMe ? "items-end" : "items-start"
                   }`}
                 >
-                  {/* Message Bubble */}
                   <div
                     className={`relative rounded-2xl px-4 py-2 max-w-xs sm:max-w-sm ${
                       e.messageType === "image"
                         ? ""
-                        : `shadow-md  backdrop-blur-md ${
+                        : `shadow-sm backdrop-blur-md ${
                             isSentByMe
-                              ? "text-white rounded-br-sm"
-                              : "bg-white/10 text-white rounded-bl-sm"
+                              ? "bg-primary text-primary-foreground rounded-br-sm"
+                              : "bg-card text-card-foreground rounded-bl-sm border border-border/50"
                           }`
                     }`}
                   >
                     {e.messageType === "image" && e.image && (
                       <div className="relative group w-52 h-52">
                         {" "}
-                        {/* fixed size wrapper */}
                         <Image
                           src={e.image.url}
                           alt="shared image"
-                          className="w-full h-full object-cover rounded-xl shadow-md"
-                          width={200} 
-                          height={200} 
+                          className="w-full h-full object-cover rounded-lg shadow-md"
+                          width={200}
+                          height={200}
+                          unoptimized
                         />
                       </div>
                     )}
                     {e.text && <p className="whitespace-pre-line">{e.text}</p>}
                   </div>
 
-                  {/* Timestamp + Status */}
                   <div
-                    className={`flex items-center gap-1 text-[11px] text-white/40 ${
+                    className={`flex items-center gap-1 text-[11px] text-muted-foreground ${
                       isSentByMe ? "pr-2 flex-row-reverse" : "pl-2"
                     }`}
                   >
@@ -96,14 +94,14 @@ const ChatMessages = ({
                     {isSentByMe && (
                       <div className="flex items-center ml-1">
                         {e.seen ? (
-                          <div className="flex items-center gap-1 text-blue-400">
+                          <div className="flex items-center gap-1 text-primary">
                             <CheckCheck className="w-3 h-3" />
                             {e.seenAt && (
                               <span>{moment(e.seenAt).format("hh:mm A")}</span>
                             )}
                           </div>
                         ) : (
-                          <Check className="w-3 h-3 text-gray-500" />
+                          <Check className="w-3 h-3 text-muted-foreground" />
                         )}
                       </div>
                     )}

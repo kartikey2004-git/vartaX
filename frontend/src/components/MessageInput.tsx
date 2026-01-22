@@ -38,20 +38,20 @@ const MessageInput = ({
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex flex-col gap-2 border-t border-gray-700 pt-2"
+      className="flex flex-col gap-2 border-t border-border/50 pt-4"
     >
       {imageFile && (
         <div className="relative w-fit">
           <Image
             src={URL.createObjectURL(imageFile)}
             alt="preview"
-            className="w-24 h-24 object-cover rounded-lg border border-gray-600"
+            className="w-24 h-24 object-cover rounded-md border border-border/50 shadow-sm"
             width={200}
             height={200}
           />
           <Button
             type="button"
-            className="absolute -top-2 -right-2 bg-black rounded-full p-1"
+            className="absolute -top-2 -right-2 bg-destructive hover:bg-destructive/95 rounded-full p-1"
             onClick={() => setImageFile(null)}
           >
             <X className="w-4 h-4 text-white" />
@@ -60,8 +60,8 @@ const MessageInput = ({
       )}
 
       <div className="flex items-center gap-2">
-        <Label className="cursor-pointer bg-[#0d1117] hover:bg-gray-800 rounded-sm px-3 py-3 transition-colors">
-          <Paperclip size={18} className="text-gray-300" />
+        <Label className="cursor-pointer bg-secondary hover:bg-secondary/80 rounded-md px-3 py-3 transition-colors">
+          <Paperclip size={18} className="text-muted-foreground" />
           <Input
             type="file"
             accept="image/*"
@@ -77,7 +77,7 @@ const MessageInput = ({
         </Label>
         <Input
           type="text"
-          className="border border-[#30363d] bg-[#0d1117] px-4 py-5 text-white placeholder-gray-500 outline-none transition-colors focus:ring-1 focus:ring-[#1f6feb] focus:ring-offset-[#0f1117] flex-1 rounded-lg"
+          className="flex-1 rounded-md"
           placeholder={imageFile ? "Add a caption..." : "Type a message"}
           value={message}
           onChange={(e) => setMessage(e.target.value)}
@@ -86,7 +86,7 @@ const MessageInput = ({
         <Button
           type="submit"
           disabled={(!imageFile && !message) || isUploading}
-          className="bg-[#0d1117] hover:bg-gray-800 px-4 py-3 rounded-lg transition-colors flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed text-white"
+          className="bg-primary hover:bg-primary/95 px-4 py-3 rounded-md transition-colors flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed text-primary-foreground"
         >
           {isUploading ? (
             <Loader2 className="w-4 h-4 animate-spin" />

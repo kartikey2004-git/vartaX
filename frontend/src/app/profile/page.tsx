@@ -36,7 +36,7 @@ const Profilepage = () => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       Cookies.set("token", data.token, {
@@ -62,71 +62,64 @@ const Profilepage = () => {
   if (loading) return <Loading />;
 
   return (
-    <div className="min-h-screen bg-[#0f1117] p-6">
+    <div className="min-h-screen bg-background p-6">
       <div className="max-w-2xl mx-auto pt-10">
-        {/* Header */}
         <div className="flex items-center gap-4 mb-10">
           <Button
-            className="p-3 bg-[#1a1d25] hover:bg-[#272a33] rounded-lg text-white border border-gray-800 transition-colors"
+            className="p-3 bg-secondary hover:bg-secondary/80 rounded-md text-foreground border border-border/50 transition-colors"
             onClick={() => router.push("/chat")}
           >
-            <ArrowLeft className="w-5 h-5 text-gray-300" />
+            <ArrowLeft className="w-5 h-5 text-muted-foreground" />
           </Button>
 
           <div>
-            <h1 className="text-3xl font-semibold text-white">
+            <h1 className="text-3xl font-semibold text-foreground">
               Profile Settings
             </h1>
-            <p className="text-gray-400 mt-1 text-sm">
+            <p className="text-muted-foreground mt-1 text-sm">
               Manage your account information
             </p>
           </div>
         </div>
 
-        {/* Profile Card */}
-        <div className="bg-[#1a1d25] rounded-xl border border-gray-700 shadow-lg overflow-hidden">
-          <div className="bg-[#16181f] p-8 border-b border-gray-600 flex items-center gap-6">
-            {/* Avatar */}
+        <div className="bg-card rounded-md border border-border/50 shadow-sm overflow-hidden">
+          <div className="bg-secondary/50 p-8 border-b border-border/50 flex items-center gap-6">
             <div className="relative">
-              <div className="w-20 h-20 rounded-full bg-gray-600 flex items-center justify-center">
-                <UserCircle className="w-12 h-12 text-gray-300" />
+              <div className="w-20 h-20 rounded-full bg-muted flex items-center justify-center">
+                <UserCircle className="w-12 h-12 text-muted-foreground" />
               </div>
-              <span className="absolute -bottom-0.5 -right-0.5 w-5 h-5 bg-green-500 rounded-full border-2 border-[#1a1d25]" />
+              <span className="absolute -bottom-0.5 -right-0.5 w-5 h-5 bg-green-500 rounded-full border-2 border-card" />
             </div>
 
-            {/* User Info */}
             <div className="flex-1">
-              <h2 className="text-2xl  text-white mb-1">
+              <h2 className="text-2xl text-foreground mb-1">
                 {user?.name || "User"}
               </h2>
-              <p className="text-gray-400 text-sm">Active now</p>
+              <p className="text-muted-foreground text-sm">Active now</p>
             </div>
           </div>
 
-          {/* Settings Section */}
           <div className="p-6 space-y-4">
             <div>
-              <Label className="text-gray-300">Display Name</Label>
+              <Label className="text-foreground">Display Name</Label>
 
               {isEdit ? (
                 <form onSubmit={submitHandler} className="mt-2 space-y-3">
-                  {/* Input with icon */}
                   <div className="relative">
                     <Input
                       type="text"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      className="w-full pr-10 bg-[#1a1d25] text-white border border-gray-700 rounded-lg focus:border-blue-500 focus:ring-blue-500"
+                      className="w-full pr-10 bg-card text-foreground border border-border/50 rounded-md focus:border-primary focus:ring-primary/50"
                       placeholder="Enter your name"
                     />
-                    <User className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                    <User className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
                   </div>
 
-                  {/* Action buttons */}
                   <div className="flex items-center gap-3">
                     <Button
                       type="submit"
-                      className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors"
+                      className="flex items-center gap-2 bg-primary hover:bg-primary/95 text-primary-foreground px-4 py-2 rounded-md transition-colors"
                     >
                       <Save className="w-4 h-4" />
                       Save Changes
@@ -135,18 +128,20 @@ const Profilepage = () => {
                     <Button
                       type="button"
                       onClick={editHandler}
-                      className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors"
+                      className="px-4 py-2 bg-secondary hover:bg-secondary/80 text-foreground rounded-md transition-colors"
                     >
                       Cancel
                     </Button>
                   </div>
                 </form>
               ) : (
-                <div className="flex items-center justify-between mt-2 bg-[#1a1d25] p-3 rounded-lg border border-gray-700">
-                  <span className="text-white">{user?.name || "Not set"}</span>
+                <div className="flex items-center justify-between mt-2 bg-card p-3 rounded-md border border-border/50">
+                  <span className="text-foreground">
+                    {user?.name || "Not set"}
+                  </span>
                   <Button
                     onClick={editHandler}
-                    className="px-3 py-1 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors"
+                    className="px-3 py-1 bg-secondary hover:bg-secondary/80 text-foreground rounded-md transition-colors"
                   >
                     Edit
                   </Button>

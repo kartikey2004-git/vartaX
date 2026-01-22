@@ -79,7 +79,7 @@ const VerifyOtp = () => {
 
   const handleKeyDown = (
     index: number,
-    e: React.KeyboardEvent<HTMLElement>
+    e: React.KeyboardEvent<HTMLElement>,
   ): void => {
     if (e.key === "Backspace" && !otp[index] && index > 0) {
       inputRefs.current[index - 1]?.focus();
@@ -173,31 +173,31 @@ const VerifyOtp = () => {
   if (isAuth) redirect("/chat");
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-[#0f1117] text-foreground px-3 sm:px-0">
-      <div className="absolute w-72 h-72 sm:w-96 sm:h-96 rounded-full bg-[#1f6feb]/30 blur-3xl animate-pulse -z-10"></div>
+    <div className="flex justify-center items-center min-h-screen bg-background text-foreground px-3 sm:px-0">
+      <div className="absolute w-72 h-72 sm:w-96 sm:h-96 rounded-full bg-primary/10 blur-3xl animate-pulse -z-10"></div>
 
-      <div className="w-full max-w-md bg-[#161b22]/90 rounded-3xl p-6 sm:p-10 shadow-2xl border border-white/10 backdrop-blur-md transition-all">
+      <div className="w-full max-w-md bg-card/90 rounded-3xl p-6 sm:p-10 shadow-xl border border-border/50 backdrop-blur-md transition-all">
         <div className="text-center mb-8 relative">
           <Button
             onClick={() => router.push("/login")}
-            className="absolute top-0 left-0 p-2 text-gray-300 hover:text-white bg-[#0f1117] hover:bg-[#1a1d25]"
+            className="absolute top-0 left-0 p-2 text-muted-foreground hover:text-foreground bg-secondary hover:bg-secondary/80"
           >
             <ChevronLeft />
           </Button>
 
-          <h1 className="text-xl sm:text-2xl md:text-3xl font-medium text-white mb-3">
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-medium text-foreground mb-3">
             Verify Your Email
           </h1>
 
-          <p className="text-sm sm:text-base text-gray-400">
-            We’ve sent a 6-digit code to{" "}
-            <span className="text-white">{email}</span>
+          <p className="text-sm sm:text-base text-muted-foreground">
+            We've sent a 6-digit code to{" "}
+            <span className="text-foreground">{email}</span>
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="flex flex-col gap-2">
-            <Label className="text-center text-gray-400 font-semibold mb-4">
+            <Label className="text-center text-muted-foreground font-semibold mb-4">
               Enter your 6 digit OTP here
             </Label>
 
@@ -214,7 +214,7 @@ const VerifyOtp = () => {
                   type="text"
                   maxLength={1}
                   value={digit}
-                  className="w-10 h-10 sm:w-12 sm:h-12 text-white bg-transparent border border-gray-400 text-center text-lg sm:text-xl font-normal focus:outline-none focus:ring-2 focus:ring-[#9f59ff] rounded-md"
+                  className="w-10 h-10 sm:w-12 sm:h-12 text-foreground bg-transparent border border-border text-center text-lg sm:text-xl font-semibold focus:outline-none focus:ring-2 focus:ring-primary/50 rounded-sm"
                   onChange={(e) => handleInputChange(e.target.value, index)}
                   onKeyDown={(e) => handleKeyDown(index, e)}
                   onPaste={index === 0 ? handlePaste : undefined}
@@ -224,8 +224,8 @@ const VerifyOtp = () => {
           </div>
 
           {error && (
-            <div className="bg-red-900 border border-red-700 rounded-lg p-3">
-              <p className="text-red-300 text-sm text-center">{error}</p>
+            <div className="bg-destructive/10 border border-destructive/30 rounded-md p-3">
+              <p className="text-destructive text-sm text-center">{error}</p>
             </div>
           )}
 
@@ -233,30 +233,28 @@ const VerifyOtp = () => {
             variant="default"
             type="submit"
             disabled={loading}
-            className={`w-full py-3 rounded-md transition duration-200 font-normal ${
-              loading
-                ? "bg-gray-600 cursor-not-allowed"
-                : "bg-[#0f1117] hover:bg-[#1a1d25]"
-            } text-white`}
+            className={`w-full py-3 rounded-md transition duration-200 font-normal flex items-center justify-center gap-2 ${
+              loading ? "opacity-50 cursor-not-allowed" : "hover:bg-primary/95"
+            }`}
           >
             {loading ? "Verifying..." : "Verify"}
-            <ArrowRight className="w-5 h-5 ml-2" />
+            <ArrowRight className="w-5 h-5" />
           </Button>
         </form>
 
         <div className="relative mt-6">
-          <p className="text-gray-400 text-sm mb-2 text-center">
+          <p className="text-muted-foreground text-sm mb-2 text-center">
             Didn&apos;t receive the code?
           </p>
 
           {timer > 0 ? (
-            <p className="text-sm text-gray-400 text-center">
+            <p className="text-sm text-muted-foreground text-center">
               Resend code in {timer}s
             </p>
           ) : (
             <div className="flex justify-center">
               <Button
-                className="bg-[#0f1117] hover:bg-[#1a1d25] text-white text-sm font-normal"
+                className="bg-secondary hover:bg-secondary/80 text-foreground text-sm font-normal"
                 disabled={resendLoading}
                 onClick={handleResendOtp}
               >

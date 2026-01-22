@@ -57,9 +57,7 @@ const ChatApp = () => {
   const { onlineUsers, socket } = SocketData();
   // console.log(onlineUsers);
 
-  // now we are going to create some useStates which we are going to send in sidebar
-
-  // which user is selected in chats sidebar
+  // now we are going to create some useStates which we are going to send in sidebar that which user is selected in chats sidebar
 
   const [selectedUser, setSelectedUser] = useState<string | null>(null);
 
@@ -90,7 +88,7 @@ const ChatApp = () => {
   // state for timeout for typing
 
   const [typingTimeout, setTypingTimeout] = useState<NodeJS.Timeout | null>(
-    null
+    null,
   );
 
   const router = useRouter();
@@ -117,7 +115,7 @@ const ChatApp = () => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       setMessages(data.messages);
@@ -132,14 +130,14 @@ const ChatApp = () => {
   const moveChatToTop = (
     chatId: string,
     newMessage: any,
-    updatedUnseenCount = true
+    updatedUnseenCount = true,
   ) => {
     setChats((prev) => {
       if (!prev) return null;
 
       const updatedChats = [...prev];
       const chatIndex = updatedChats.findIndex(
-        (chat) => chat.chat._id === chatId
+        (chat) => chat.chat._id === chatId,
       );
 
       if (chatIndex !== -1) {
@@ -200,7 +198,7 @@ const ChatApp = () => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
       setSelectedUser(data.chatId);
       setShowAllUsers(false);
@@ -252,13 +250,13 @@ const ChatApp = () => {
             Authorization: `Bearer ${token}`,
             "Content-Type": "multipart/form-data",
           },
-        }
+        },
       );
 
       setMessages((prev) => {
         const currentMessages = prev || [];
         const messageExists = currentMessages.some(
-          (msg) => msg._id === data.message._id
+          (msg) => msg._id === data.message._id,
         );
 
         if (!messageExists) {
@@ -277,7 +275,7 @@ const ChatApp = () => {
           text: displayText,
           sender: data.sender,
         },
-        false
+        false,
       );
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.data?.message) {
@@ -323,7 +321,7 @@ const ChatApp = () => {
         setMessages((prev) => {
           const currentMessages = prev || [];
           const messageExists = currentMessages.some(
-            (msg) => msg._id === message._id
+            (msg) => msg._id === message._id,
           );
 
           if (!messageExists) {
@@ -417,10 +415,7 @@ const ChatApp = () => {
   if (loading) return <Loading />;
 
   return (
-    <div
-      className="min-h-screen flex 
-    bg-[#161b22] text-white overflow-hidden"
-    >
+    <div className="min-h-screen flex bg-background text-foreground overflow-hidden">
       <ChatSideBar
         sidebarOpen={sidebarOpen}
         setSidebarOpen={setSidebarOpen}
@@ -431,12 +426,11 @@ const ChatApp = () => {
         chats={chats}
         selectedUser={selectedUser}
         setSelectedUser={setSelectedUser}
-        handleLogout={handleLogout}
         createChat={createChat}
         onlineUsers={onlineUsers}
       />
 
-      <div className="flex-1 flex flex-col justify-between p-4 backdrop-blur-xl bg-white/5 border-1 border-white/10">
+      <div className="flex-1 flex flex-col justify-between p-6 backdrop-blur-xl bg-card/80 border border-border/50 rounded-lg mx-4 my-4">
         <ChatHeader
           onlineUsers={onlineUsers}
           user={user}
