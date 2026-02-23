@@ -37,10 +37,10 @@ const ChatMessages = ({
   }, [selectedUser, uniqueMessages]);
 
   return (
-    <div className="flex-1 overflow-hidden">
-      <div className="h-full max-h-[calc(100vh-215px)] overflow-y-auto px-4 py-3 space-y-3 scrollbar-hide">
+    <div className="flex min-h-0 flex-1 overflow-hidden">
+      <div className="h-full w-full space-y-3 overflow-y-auto px-1 py-2 scrollbar-hide sm:px-2">
         {!selectedUser ? (
-          <p className="text-muted-foreground text-center mt-20 text-sm">
+          <p className="mt-20 text-center text-sm text-muted-foreground">
             Please select a user to start chatting
           </p>
         ) : (
@@ -58,23 +58,23 @@ const ChatMessages = ({
                   }`}
                 >
                   <div
-                    className={`relative rounded-2xl px-4 py-2 max-w-xs sm:max-w-sm ${
+                    className={`relative max-w-xs rounded-md px-3 py-2 sm:max-w-md ${
                       e.messageType === "image"
                         ? ""
-                        : `shadow-sm backdrop-blur-md ${
+                        : `shadow-sm ${
                             isSentByMe
-                              ? "bg-primary text-primary-foreground rounded-br-sm"
-                              : "bg-card text-card-foreground rounded-bl-sm border border-border/50"
+                              ? "bg-primary text-primary-foreground"
+                              : "border bg-card text-card-foreground"
                           }`
                     }`}
                   >
                     {e.messageType === "image" && e.image && (
-                      <div className="relative group w-52 h-52">
+                      <div className="group relative h-52 w-52">
                         {" "}
                         <Image
                           src={e.image.url}
                           alt="shared image"
-                          className="w-full h-full object-cover rounded-lg shadow-md"
+                          className="h-full w-full rounded-lg border object-cover shadow-sm"
                           width={200}
                           height={200}
                           unoptimized

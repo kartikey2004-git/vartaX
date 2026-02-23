@@ -415,7 +415,7 @@ const ChatApp = () => {
   if (loading) return <Loading />;
 
   return (
-    <div className="min-h-screen flex bg-background text-foreground overflow-hidden">
+    <div className="flex h-dvh bg-background text-foreground overflow-hidden">
       <ChatSideBar
         sidebarOpen={sidebarOpen}
         setSidebarOpen={setSidebarOpen}
@@ -430,7 +430,7 @@ const ChatApp = () => {
         onlineUsers={onlineUsers}
       />
 
-      <div className="flex-1 flex flex-col justify-between p-6 backdrop-blur-xl bg-card/80 border border-border/50 rounded-lg mx-4 my-4">
+      <div className="m-3 flex min-w-0 flex-1 flex-col rounded-lg border bg-card p-3 shadow-sm sm:m-4 sm:p-4">
         <ChatHeader
           onlineUsers={onlineUsers}
           user={user}

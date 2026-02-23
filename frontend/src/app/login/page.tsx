@@ -10,6 +10,7 @@ import axios from "axios";
 import { toast } from "sonner";
 import { useAppData, user_service } from "@/context/AppContext";
 import Loading from "@/components/Loading";
+import ThemeToggle from "@/components/ThemeToggle";
 
 const Login = () => {
   const [email, setEmail] = useState<string>("");
@@ -55,86 +56,91 @@ const Login = () => {
   if (isAuth) return redirect("/chat");
 
   return (
-    <div className="min-h-screen flex flex-col lg:flex-row bg-background">
-      <div className="relative flex w-full items-center justify-center px-6 py-20 lg:w-3/5 lg:px-16">
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: `
-          linear-gradient(rgba(0,0,0,0.08) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(0,0,0,0.08) 1px, transparent 1px)
-        `,
-            backgroundSize: "50px 50px",
-          }}
-        />
-        <div className="relative z-10 max-w-2xl text-center lg:text-left">
-          <h1 className="mb-6 text-4xl font-light leading-tight tracking-tighter md:text-5xl">
-            <span className="font-normal  text-foreground">VartaX</span> <br />
-            <span className="font-normal text-foreground">
-              Always Connected
-            </span>
-          </h1>
-
-          <p className="mb-6 inline-block rounded border border-border/50 bg-card/80 px-4 py-2 text-sm text-muted-foreground backdrop-blur-sm shadow-sm">
-            Discover VartaX
-          </p>
-
-          <p className="max-w-md text-base leading-relaxed text-muted-foreground md:text-lg mx-auto lg:mx-0">
-            Chat with anyone in real time—messages deliver instantly, files
-            share smoothly, and you always stay connected.
-          </p>
-        </div>
+    <div className="min-h-screen bg-background">
+      <div className="fixed right-4 top-4 z-40">
+        <ThemeToggle />
       </div>
 
-      <div className="w-full lg:w-2/5 flex items-center justify-center bg-card/90 px-6 py-12 lg:px-12">
-        <div className="w-full max-w-md">
-          <div className="text-muted-foreground mt-3 text-base text-center">
-            Enter your email to continue your journey
-          </div>
+      <div className="flex min-h-screen flex-col lg:flex-row">
+        <div className="relative flex w-full items-center justify-center px-6 py-20 lg:w-3/5 lg:px-16">
+          <div className="absolute inset-0 bg-secondary/30" />
+          <div
+            className="absolute inset-0 opacity-70 dark:opacity-30"
+            style={{
+              backgroundImage:
+                "linear-gradient(rgba(0,0,0,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.06) 1px, transparent 1px)",
+              backgroundSize: "48px 48px",
+            }}
+          />
 
-          <div className="flex items-center my-6">
-            <div className="flex-1 border-t border-border/50"></div>
-            <span className="px-4 text-muted-foreground text-sm">
-              Login with email
-            </span>
-            <div className="flex-1 border-t border-border/50"></div>
-          </div>
+          <div className="relative z-10 max-w-2xl text-center lg:text-left">
+            <h1 className="mb-6 text-4xl font-light leading-tight tracking-tight text-foreground md:text-5xl">
+              <span className="font-normal">VartaX</span>
+              <br />
+              <span className="font-normal">Always Connected</span>
+            </h1>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div>
-              <Label
-                htmlFor="email"
-                className="block mb-2 text-sm font-medium text-foreground"
-              >
-                Email Address
-              </Label>
-              <Input
-                type="email"
-                id="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@example.com"
-                required
-                className="w-full"
-              />
+            <p className="mb-6 inline-block rounded-md border bg-card px-4 py-2 text-sm text-muted-foreground shadow-sm">
+              Discover VartaX
+            </p>
+
+            <p className="mx-auto max-w-md text-base leading-relaxed text-muted-foreground lg:mx-0 lg:text-lg">
+              Chat with anyone in real time—messages deliver instantly, files
+              share smoothly, and you always stay connected.
+            </p>
+          </div>
+        </div>
+
+        <div className="flex w-full items-center justify-center px-6 py-12 lg:w-2/5 lg:px-12">
+          <div className="w-full max-w-md">
+            <div className="mt-1 text-center text-sm text-muted-foreground sm:text-base">
+              Enter your email to continue your journey
             </div>
 
-            <Button
-              variant="default"
-              type="submit"
-              disabled={loading}
-              className={`w-full py-3 rounded font-medium transition-colors flex items-center justify-center gap-2 ${
-                loading
-                  ? "opacity-50 cursor-not-allowed"
-                  : "hover:bg-primary/95"
-              }`}
-            >
-              {loading
-                ? "Sending Otp to your mail..."
-                : "Send Verification Code"}
-              <ArrowRight className="w-5 h-5" />
-            </Button>
-          </form>
+            <div className="my-6 flex items-center">
+              <div className="flex-1 border-t"></div>
+              <span className="px-4 text-sm text-muted-foreground">
+                Login with email
+              </span>
+              <div className="flex-1 border-t"></div>
+            </div>
+
+            <form onSubmit={handleSubmit} className="space-y-5">
+              <div>
+                <Label
+                  htmlFor="email"
+                  className="mb-2 block text-sm font-medium text-foreground"
+                >
+                  Email Address
+                </Label>
+                <Input
+                  type="email"
+                  id="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="you@example.com"
+                  required
+                  className="w-full"
+                />
+              </div>
+
+              <Button
+                variant="default"
+                type="submit"
+                disabled={loading}
+                className={`flex w-full items-center justify-center gap-2 rounded-md py-3 font-medium transition-colors ${
+                  loading
+                    ? "cursor-not-allowed opacity-50"
+                    : "hover:bg-primary/95"
+                }`}
+              >
+                {loading
+                  ? "Sending Otp to your mail..."
+                  : "Send Verification Code"}
+                <ArrowRight className="h-5 w-5" />
+              </Button>
+            </form>
+          </div>
         </div>
       </div>
     </div>

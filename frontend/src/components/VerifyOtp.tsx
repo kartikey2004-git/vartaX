@@ -13,6 +13,7 @@ import Cookies from "js-cookie";
 import { toast } from "sonner";
 import { useAppData, user_service } from "@/context/AppContext";
 import Loading from "./Loading";
+import ThemeToggle from "./ThemeToggle";
 
 const VerifyOtp = () => {
   const {
@@ -173,24 +174,28 @@ const VerifyOtp = () => {
   if (isAuth) redirect("/chat");
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-background text-foreground px-3 sm:px-0">
-      <div className="absolute w-72 h-72 sm:w-96 sm:h-96 rounded-full bg-primary/10 blur-3xl animate-pulse -z-10"></div>
-
-      <div className="w-full max-w-md bg-card/90 rounded-3xl p-6 sm:p-10 shadow-xl border border-border/50 backdrop-blur-md transition-all">
-        <div className="text-center mb-8 relative">
+    <div className="flex min-h-screen items-center justify-center bg-background px-3 text-foreground sm:px-6">
+      <div className="w-full max-w-md rounded-lg border bg-card p-6 shadow-sm sm:p-8">
+        <div className="relative mb-8 text-center">
           <Button
             onClick={() => router.push("/login")}
-            className="absolute top-0 left-0 p-2 text-muted-foreground hover:text-foreground bg-secondary hover:bg-secondary/80"
+            variant="outline"
+            size="icon"
+            className="absolute left-0 top-0 h-9 w-9 rounded-md text-muted-foreground hover:text-foreground"
           >
             <ChevronLeft />
           </Button>
 
-          <h1 className="text-xl sm:text-2xl md:text-3xl font-medium text-foreground mb-3">
+          <div className="absolute right-0 top-0">
+            <ThemeToggle />
+          </div>
+
+          <h1 className="mb-3 text-xl font-medium text-foreground sm:text-2xl md:text-3xl">
             Verify Your Email
           </h1>
 
-          <p className="text-sm sm:text-base text-muted-foreground">
-            We've sent a 6-digit code to{" "}
+          <p className="text-sm text-muted-foreground sm:text-base">
+            We&apos;ve sent a 6-digit code to{" "}
             <span className="text-foreground">{email}</span>
           </p>
         </div>
@@ -214,7 +219,7 @@ const VerifyOtp = () => {
                   type="text"
                   maxLength={1}
                   value={digit}
-                  className="w-10 h-10 sm:w-12 sm:h-12 text-foreground bg-transparent border border-border text-center text-lg sm:text-xl font-semibold focus:outline-none focus:ring-2 focus:ring-primary/50 rounded-sm"
+                  className="h-10 w-10 rounded-md border bg-input text-center text-lg font-semibold text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 sm:h-12 sm:w-12 sm:text-xl"
                   onChange={(e) => handleInputChange(e.target.value, index)}
                   onKeyDown={(e) => handleKeyDown(index, e)}
                   onPaste={index === 0 ? handlePaste : undefined}
@@ -233,7 +238,7 @@ const VerifyOtp = () => {
             variant="default"
             type="submit"
             disabled={loading}
-            className={`w-full py-3 rounded-md transition duration-200 font-normal flex items-center justify-center gap-2 ${
+            className={`flex w-full items-center justify-center gap-2 rounded-md py-3 font-normal transition duration-200 ${
               loading ? "opacity-50 cursor-not-allowed" : "hover:bg-primary/95"
             }`}
           >
@@ -254,7 +259,8 @@ const VerifyOtp = () => {
           ) : (
             <div className="flex justify-center">
               <Button
-                className="bg-secondary hover:bg-secondary/80 text-foreground text-sm font-normal"
+                variant="secondary"
+                className="text-sm font-normal"
                 disabled={resendLoading}
                 onClick={handleResendOtp}
               >

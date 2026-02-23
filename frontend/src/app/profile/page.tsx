@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, Save, User, UserCircle } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import ThemeToggle from "@/components/ThemeToggle";
 
 const Profilepage = () => {
   const { user, isAuth, loading, setUser } = useAppData();
@@ -62,44 +63,49 @@ const Profilepage = () => {
   if (loading) return <Loading />;
 
   return (
-    <div className="min-h-screen bg-background p-6">
-      <div className="max-w-2xl mx-auto pt-10">
-        <div className="flex items-center gap-4 mb-10">
-          <Button
-            className="p-3 bg-secondary hover:bg-secondary/80 rounded-md text-foreground border border-border/50 transition-colors"
-            onClick={() => router.push("/chat")}
-          >
-            <ArrowLeft className="w-5 h-5 text-muted-foreground" />
-          </Button>
+    <div className="min-h-screen bg-background p-4 sm:p-6">
+      <div className="mx-auto max-w-2xl pt-4 sm:pt-8">
+        <div className="mb-8 flex items-center justify-between gap-4">
+          <div className="flex items-center gap-4">
+            <Button
+              variant="outline"
+              className="rounded-md p-3 transition-colors"
+              onClick={() => router.push("/chat")}
+            >
+              <ArrowLeft className="h-5 w-5 text-muted-foreground" />
+            </Button>
 
-          <div>
-            <h1 className="text-3xl font-semibold text-foreground">
-              Profile Settings
-            </h1>
-            <p className="text-muted-foreground mt-1 text-sm">
-              Manage your account information
-            </p>
+            <div>
+              <h1 className="text-2xl font-semibold text-foreground sm:text-3xl">
+                Profile Settings
+              </h1>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Manage your account information
+              </p>
+            </div>
           </div>
+
+          <ThemeToggle />
         </div>
 
-        <div className="bg-card rounded-md border border-border/50 shadow-sm overflow-hidden">
-          <div className="bg-secondary/50 p-8 border-b border-border/50 flex items-center gap-6">
+        <div className="overflow-hidden rounded-lg border bg-card shadow-sm">
+          <div className="flex items-center gap-5 border-b bg-secondary/40 p-6 sm:gap-6 sm:p-8">
             <div className="relative">
-              <div className="w-20 h-20 rounded-full bg-muted flex items-center justify-center">
-                <UserCircle className="w-12 h-12 text-muted-foreground" />
+              <div className="flex h-20 w-20 items-center justify-center rounded-full bg-muted">
+                <UserCircle className="h-12 w-12 text-muted-foreground" />
               </div>
-              <span className="absolute -bottom-0.5 -right-0.5 w-5 h-5 bg-green-500 rounded-full border-2 border-card" />
+              <span className="absolute -bottom-0.5 -right-0.5 h-5 w-5 rounded-full border-2 border-card bg-green-500" />
             </div>
 
             <div className="flex-1">
-              <h2 className="text-2xl text-foreground mb-1">
+              <h2 className="mb-1 text-xl text-foreground sm:text-2xl">
                 {user?.name || "User"}
               </h2>
-              <p className="text-muted-foreground text-sm">Active now</p>
+              <p className="text-sm text-muted-foreground">Active now</p>
             </div>
           </div>
 
-          <div className="p-6 space-y-4">
+          <div className="space-y-4 p-5 sm:p-6">
             <div>
               <Label className="text-foreground">Display Name</Label>
 
@@ -110,39 +116,33 @@ const Profilepage = () => {
                       type="text"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      className="w-full pr-10 bg-card text-foreground border border-border/50 rounded-md focus:border-primary focus:ring-primary/50"
+                      className="w-full pr-10"
                       placeholder="Enter your name"
                     />
-                    <User className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
+                    <User className="absolute right-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
                   </div>
 
                   <div className="flex items-center gap-3">
-                    <Button
-                      type="submit"
-                      className="flex items-center gap-2 bg-primary hover:bg-primary/95 text-primary-foreground px-4 py-2 rounded-md transition-colors"
-                    >
-                      <Save className="w-4 h-4" />
+                    <Button type="submit" className="flex items-center gap-2">
+                      <Save className="h-4 w-4" />
                       Save Changes
                     </Button>
 
                     <Button
                       type="button"
+                      variant="secondary"
                       onClick={editHandler}
-                      className="px-4 py-2 bg-secondary hover:bg-secondary/80 text-foreground rounded-md transition-colors"
                     >
                       Cancel
                     </Button>
                   </div>
                 </form>
               ) : (
-                <div className="flex items-center justify-between mt-2 bg-card p-3 rounded-md border border-border/50">
+                <div className="mt-2 flex items-center justify-between rounded-md border bg-card p-3">
                   <span className="text-foreground">
                     {user?.name || "Not set"}
                   </span>
-                  <Button
-                    onClick={editHandler}
-                    className="px-3 py-1 bg-secondary hover:bg-secondary/80 text-foreground rounded-md transition-colors"
-                  >
+                  <Button variant="outline" onClick={editHandler}>
                     Edit
                   </Button>
                 </div>

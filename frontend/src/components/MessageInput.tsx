@@ -38,14 +38,14 @@ const MessageInput = ({
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex flex-col gap-2 border-t border-border/50 pt-4"
+      className="mt-2 flex flex-col gap-2 border-t pt-3"
     >
       {imageFile && (
         <div className="relative w-fit">
           <Image
             src={URL.createObjectURL(imageFile)}
             alt="preview"
-            className="w-24 h-24 object-cover rounded-md border border-border/50 shadow-sm"
+            className="h-24 w-24 rounded-md border object-cover shadow-sm"
             width={200}
             height={200}
           />
@@ -60,7 +60,7 @@ const MessageInput = ({
       )}
 
       <div className="flex items-center gap-2">
-        <Label className="cursor-pointer bg-secondary hover:bg-secondary/80 rounded-md px-3 py-3 transition-colors">
+        <Label className="cursor-pointer rounded-md border bg-secondary px-3 py-3 transition-colors hover:bg-secondary/80">
           <Paperclip size={18} className="text-muted-foreground" />
           <Input
             type="file"
@@ -86,7 +86,7 @@ const MessageInput = ({
         <Button
           type="submit"
           disabled={(!imageFile && !message) || isUploading}
-          className="bg-primary hover:bg-primary/95 px-4 py-3 rounded-md transition-colors flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed text-primary-foreground"
+          className="flex items-center gap-1 rounded-md px-4 py-3 text-primary-foreground transition-colors disabled:cursor-not-allowed disabled:opacity-50"
         >
           {isUploading ? (
             <Loader2 className="w-4 h-4 animate-spin" />

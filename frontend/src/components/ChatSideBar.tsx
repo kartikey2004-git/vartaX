@@ -39,11 +39,11 @@ const ChatSideBar = ({
   const [searchQuery, setsearchQuery] = useState("");
   return (
     <aside
-      className={`fixed z-20 sm:static top-0 left-0 h-screen w-80 bg-card border-r border-border/60 transform ${
+      className={`fixed left-0 top-0 z-20 h-dvh w-80 border-r bg-card transform ${
         sidebarOpen ? "translate-x-0" : "-translate-x-full"
-      } sm:translate-x-0 transition-transform duration-300 flex flex-col rounded-r-xl shadow-sm`}
+      } flex flex-col shadow-sm transition-transform duration-300 sm:static sm:translate-x-0`}
     >
-      <div className="h-16 px-6 flex items-center justify-between border-b border-border/60">
+      <div className="flex h-16 items-center justify-between border-b px-4 sm:px-5">
         <h1 className="text-lg font-semibold text-foreground tracking-wide">
           Chats
         </h1>
@@ -51,7 +51,9 @@ const ChatSideBar = ({
         <div className="flex items-center gap-2">
           <Button
             onClick={() => setShowAllUsers((prev) => !prev)}
-            className="p-2 rounded-md bg-secondary/50 backdrop-blur-md border border-border/50 shadow-sm hover:bg-secondary transition-all"
+            variant="outline"
+            size="icon"
+            className="h-9 w-9 rounded-md"
           >
             {showAllUsers ? (
               <X className="w-5 h-5 text-muted-foreground" />
@@ -62,14 +64,16 @@ const ChatSideBar = ({
 
           <Button
             onClick={() => setSidebarOpen(false)}
-            className="sm:hidden p-2 rounded-md bg-secondary/50 backdrop-blur-md border border-border/50 shadow-sm hover:bg-secondary transition-all"
+            variant="outline"
+            size="icon"
+            className="h-9 w-9 rounded-md sm:hidden"
           >
             <X className="w-5 h-5 text-muted-foreground" />
           </Button>
         </div>
       </div>
 
-      <div className="p-4 border-b border-border/60">
+      <div className="border-b p-4">
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input
@@ -94,7 +98,7 @@ const ChatSideBar = ({
               .map((u) => (
                 <div
                   key={u._id}
-                  className="flex items-center gap-3 px-4 py-3 cursor-pointer hover:bg-accent/50 transition-colors group rounded-md mx-2 my-1"
+                  className="group mx-2 my-1 flex cursor-pointer items-center gap-3 rounded-md px-4 py-3 transition-colors hover:bg-accent"
                   onClick={() => createChat(u)}
                 >
                   <div className="relative w-11 h-11 rounded-full flex items-center justify-center group-hover:scale-105 transition-transform">
@@ -129,7 +133,7 @@ const ChatSideBar = ({
                     setSelectedUser(chat.chat._id);
                     setSidebarOpen(false);
                   }}
-                  className={`flex items-center gap-3 px-4 py-3 cursor-pointer transition-colors duration-200 rounded-md mx-2 my-1 ${
+                  className={`mx-2 my-1 flex cursor-pointer items-center gap-3 rounded-md px-4 py-3 transition-colors duration-200 ${
                     isSelected ? "bg-accent" : "hover:bg-accent/50"
                   }`}
                 >
@@ -168,10 +172,13 @@ const ChatSideBar = ({
         )}
       </div>
 
-      <div className="sticky bottom-0 bg-card/90 border-t border-border p-4">
+      <div className="sticky bottom-0 border-t bg-card p-4">
         <ProfileDialog>
-          <Button className="w-full py-3 rounded-md font-medium transition-colors bg-secondary hover:bg-secondary/80 text-foreground flex items-center justify-center gap-3">
-            <div className="p-1.5 rounded-md">
+          <Button
+            variant="secondary"
+            className="flex w-full items-center justify-center gap-3 rounded-md py-3 font-medium"
+          >
+            <div className="rounded-md p-1.5">
               <UserCircle className="w-4 h-4 text-muted-foreground" />
             </div>
             <span className="font-medium">
