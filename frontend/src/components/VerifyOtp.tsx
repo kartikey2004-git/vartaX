@@ -12,6 +12,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { toast } from "sonner";
 import { useAppData, user_service } from "@/context/AppContext";
+import { Card } from "@/components/ui/card";
 import Loading from "./Loading";
 import ThemeToggle from "./ThemeToggle";
 
@@ -143,7 +144,7 @@ const VerifyOtp = () => {
 
       fetchUsers(); // problem solved ab jaise hi user verified hoga toh all users ki saari details phirse fetch hongi
     } catch (error: any) {
-      setError(error.response.data.message);
+      setError(error.response?.data?.message || "Something went wrong");
     } finally {
       setLoading(false);
     }
@@ -164,7 +165,7 @@ const VerifyOtp = () => {
       toast.success(data.message);
       setTimer(60);
     } catch (error: any) {
-      setError(error.response.data.message);
+      setError(error.response?.data?.message || "Something went wrong");
     } finally {
       setResendLoading(false);
     }
@@ -175,22 +176,22 @@ const VerifyOtp = () => {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-3 text-foreground sm:px-6">
-      <div className="w-full max-w-md rounded-lg border bg-card p-6 shadow-sm sm:p-8">
-        <div className="relative mb-8 text-center">
-          <Button
-            onClick={() => router.push("/login")}
-            variant="outline"
-            size="icon"
-            className="absolute left-0 top-0 h-9 w-9 rounded-md text-muted-foreground hover:text-foreground"
-          >
-            <ChevronLeft />
-          </Button>
+      <Card className="w-full max-w-md p-6 sm:p-8">
+        <div className="mb-8 text-center">
+          <div className="mb-4 flex items-center justify-between">
+            <Button
+              onClick={() => router.push("/login")}
+              variant="outline"
+              size="icon"
+              className="text-muted-foreground hover:text-foreground"
+            >
+              <ChevronLeft />
+            </Button>
 
-          <div className="absolute right-0 top-0">
             <ThemeToggle />
           </div>
 
-          <h1 className="mb-3 text-xl font-medium text-foreground sm:text-2xl md:text-3xl">
+          <h1 className="mb-3 text-2xl font-semibold text-foreground sm:text-3xl">
             Verify Your Email
           </h1>
 
@@ -234,16 +235,9 @@ const VerifyOtp = () => {
             </div>
           )}
 
-          <Button
-            variant="default"
-            type="submit"
-            disabled={loading}
-            className={`flex w-full items-center justify-center gap-2 rounded-md py-3 font-normal transition duration-200 ${
-              loading ? "opacity-50 cursor-not-allowed" : "hover:bg-primary/95"
-            }`}
-          >
+          <Button type="submit" loading={loading} className="w-full gap-2 py-3">
             {loading ? "Verifying..." : "Verify"}
-            <ArrowRight className="w-5 h-5" />
+            {!loading && <ArrowRight className="w-5 h-5" />}
           </Button>
         </form>
 
@@ -261,7 +255,7 @@ const VerifyOtp = () => {
               <Button
                 variant="secondary"
                 className="text-sm font-normal"
-                disabled={resendLoading}
+                loading={resendLoading}
                 onClick={handleResendOtp}
               >
                 {resendLoading ? "Sending..." : "Resend Code"}
@@ -269,7 +263,7 @@ const VerifyOtp = () => {
             </div>
           )}
         </div>
-      </div>
+      </Card>
     </div>
   );
 };

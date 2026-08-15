@@ -42,10 +42,10 @@ const Login = () => {
       router.push(`/verify?email=${email}`);
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        toast(error.response?.data?.message || "Server error occurred");
+        toast.error(error.response?.data?.message || "Server error occurred");
       } else {
         console.error("Unexpected error:", error);
-        toast("Something went wrong");
+        toast.error("Something went wrong");
       }
     } finally {
       setLoading(false);
@@ -57,21 +57,9 @@ const Login = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="fixed right-4 top-4 z-40">
-        <ThemeToggle />
-      </div>
-
-      <div className="flex min-h-screen flex-col lg:flex-row">
-        <div className="relative flex w-full items-center justify-center px-6 py-20 lg:w-3/5 lg:px-16">
+      <div className="flex min-h-screen flex-col md:flex-row">
+        <div className="relative flex w-full items-center justify-center px-6 py-16 md:w-3/5 md:px-10 md:py-20 lg:px-16">
           <div className="absolute inset-0 bg-secondary/30" />
-          <div
-            className="absolute inset-0 opacity-70 dark:opacity-30"
-            style={{
-              backgroundImage:
-                "linear-gradient(rgba(0,0,0,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.06) 1px, transparent 1px)",
-              backgroundSize: "48px 48px",
-            }}
-          />
 
           <div className="relative z-10 max-w-2xl text-center lg:text-left">
             <h1 className="mb-6 text-4xl font-light leading-tight tracking-tight text-foreground md:text-5xl">
@@ -91,8 +79,12 @@ const Login = () => {
           </div>
         </div>
 
-        <div className="flex w-full items-center justify-center px-6 py-12 lg:w-2/5 lg:px-12">
+        <div className="flex w-full items-center justify-center px-6 py-12 md:w-2/5 md:px-8 lg:px-12">
           <div className="w-full max-w-md">
+            <div className="mb-4 flex justify-end">
+              <ThemeToggle />
+            </div>
+
             <div className="mt-1 text-center text-sm text-muted-foreground sm:text-base">
               Enter your email to continue your journey
             </div>
@@ -125,19 +117,14 @@ const Login = () => {
               </div>
 
               <Button
-                variant="default"
                 type="submit"
-                disabled={loading}
-                className={`flex w-full items-center justify-center gap-2 rounded-md py-3 font-medium transition-colors ${
-                  loading
-                    ? "cursor-not-allowed opacity-50"
-                    : "hover:bg-primary/95"
-                }`}
+                loading={loading}
+                className="w-full gap-2 py-3 font-medium"
               >
                 {loading
                   ? "Sending Otp to your mail..."
                   : "Send Verification Code"}
-                <ArrowRight className="h-5 w-5" />
+                {!loading && <ArrowRight className="h-5 w-5" />}
               </Button>
             </form>
           </div>

@@ -32,7 +32,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={inter.className}>
+      <body className={`${inter.variable} ${inter.className}`}>
         <AppProvider>
           <SocketProvider>{children}</SocketProvider>
           <Toaster />

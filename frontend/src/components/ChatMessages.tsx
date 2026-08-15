@@ -3,7 +3,8 @@ import { User } from "@/context/AppContext";
 import Image from "next/image";
 import React, { useEffect, useMemo, useRef } from "react";
 import moment from "moment";
-import { Check, CheckCheck } from "lucide-react";
+import { Check, CheckCheck, MessageSquare } from "lucide-react";
+import EmptyState from "./EmptyState";
 
 interface ChatMessagesProps {
   selectedUser: string | null;
@@ -40,9 +41,12 @@ const ChatMessages = ({
     <div className="flex min-h-0 flex-1 overflow-hidden">
       <div className="h-full w-full space-y-3 overflow-y-auto px-1 py-2 scrollbar-hide sm:px-2">
         {!selectedUser ? (
-          <p className="mt-20 text-center text-sm text-muted-foreground">
-            Please select a user to start chatting
-          </p>
+          <div className="flex h-full items-center justify-center">
+            <EmptyState
+              icon={MessageSquare}
+              title="Please select a user to start chatting"
+            />
+          </div>
         ) : (
           <>
             {uniqueMessages.map((e, i) => {
@@ -58,7 +62,7 @@ const ChatMessages = ({
                   }`}
                 >
                   <div
-                    className={`relative max-w-xs rounded-md px-3 py-2 sm:max-w-md ${
+                    className={`relative max-w-xs rounded-lg px-3 py-2 sm:max-w-md ${
                       e.messageType === "image"
                         ? ""
                         : `shadow-sm ${
@@ -85,7 +89,7 @@ const ChatMessages = ({
                   </div>
 
                   <div
-                    className={`flex items-center gap-1 text-[11px] text-muted-foreground ${
+                    className={`flex items-center gap-1 text-xs text-muted-foreground ${
                       isSentByMe ? "pr-2 flex-row-reverse" : "pl-2"
                     }`}
                   >

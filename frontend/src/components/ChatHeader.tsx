@@ -38,12 +38,12 @@ const ChatHeader = ({
           {user ? (
             <>
               <div className="relative">
-                <div className="flex h-10 w-10 items-center justify-center rounded-md border bg-secondary/40">
+                <div className="flex h-11 w-11 items-center justify-center rounded-full border bg-secondary/40">
                   <UserCircle className="w-6 h-6 text-muted-foreground" />
                 </div>
 
                 {isOnlineUser && (
-                  <span className="absolute -bottom-1 -right-1 h-3.5 w-3.5 rounded-full border-2 border-background bg-green-500" />
+                  <span className="absolute -bottom-1 -right-1 h-3.5 w-3.5 rounded-full border-2 border-background bg-success" />
                 )}
               </div>
 
@@ -74,7 +74,7 @@ const ChatHeader = ({
                       <span
                         className={`font-medium ${
                           isOnlineUser
-                            ? "text-green-600"
+                            ? "text-success"
                             : "text-muted-foreground"
                         }`}
                       >
@@ -88,7 +88,7 @@ const ChatHeader = ({
           ) : (
             <div className="flex w-full items-center justify-between gap-3">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-md border bg-secondary/40">
+                <div className="flex h-11 w-11 items-center justify-center rounded-full border bg-secondary/40">
                   <UserCircle className="w-6 h-6 text-muted-foreground" />
                 </div>
 

@@ -2,32 +2,24 @@
 "use client";
 import { useAppData, user_service } from "@/context/AppContext";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Cookies from "js-cookie";
 import axios from "axios";
 import { toast } from "sonner";
 import Loading from "@/components/Loading";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Save, User, UserCircle } from "lucide-react";
+import { ArrowLeft, UserCircle } from "lucide-react";
 import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import ThemeToggle from "@/components/ThemeToggle";
+import EditableNameField from "@/components/EditableNameField";
 
 const Profilepage = () => {
   const { user, isAuth, loading, setUser } = useAppData();
 
-  const [isEdit, setIsEdit] = useState(false);
-  const [name, setName] = useState<string | undefined>("");
-
   const router = useRouter();
 
-  const editHandler = () => {
-    setIsEdit(!isEdit);
-    setName(user?.name);
-  };
-
-  const submitHandler = async (e: any) => {
-    e.preventDefault();
+  const saveName = async (name: string) => {
     const token = Cookies.get("token");
     try {
       const { data } = await axios.post(
@@ -48,9 +40,9 @@ const Profilepage = () => {
 
       toast.success(data.message);
       setUser(data.user);
-      setIsEdit(false);
     } catch (error: any) {
-      toast.error(error.response.data.message);
+      toast.error(error.response?.data?.message || "Something went wrong");
+      throw error;
     }
   };
 
@@ -88,13 +80,13 @@ const Profilepage = () => {
           <ThemeToggle />
         </div>
 
-        <div className="overflow-hidden rounded-lg border bg-card shadow-sm">
-          <div className="flex items-center gap-5 border-b bg-secondary/40 p-6 sm:gap-6 sm:p-8">
+        <Card className="overflow-hidden gap-0 p-0">
+          <CardHeader className="flex items-center gap-5 border-b bg-secondary/40 p-6 sm:gap-6 sm:p-8">
             <div className="relative">
               <div className="flex h-20 w-20 items-center justify-center rounded-full bg-muted">
                 <UserCircle className="h-12 w-12 text-muted-foreground" />
               </div>
-              <span className="absolute -bottom-0.5 -right-0.5 h-5 w-5 rounded-full border-2 border-card bg-green-500" />
+              <span className="absolute -bottom-0.5 -right-0.5 h-5 w-5 rounded-full border-2 border-card bg-success" />
             </div>
 
             <div className="flex-1">
@@ -103,53 +95,15 @@ const Profilepage = () => {
               </h2>
               <p className="text-sm text-muted-foreground">Active now</p>
             </div>
-          </div>
+          </CardHeader>
 
-          <div className="space-y-4 p-5 sm:p-6">
+          <CardContent className="space-y-4 p-5 sm:p-6">
             <div>
               <Label className="text-foreground">Display Name</Label>
-
-              {isEdit ? (
-                <form onSubmit={submitHandler} className="mt-2 space-y-3">
-                  <div className="relative">
-                    <Input
-                      type="text"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      className="w-full pr-10"
-                      placeholder="Enter your name"
-                    />
-                    <User className="absolute right-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
-                  </div>
-
-                  <div className="flex items-center gap-3">
-                    <Button type="submit" className="flex items-center gap-2">
-                      <Save className="h-4 w-4" />
-                      Save Changes
-                    </Button>
-
-                    <Button
-                      type="button"
-                      variant="secondary"
-                      onClick={editHandler}
-                    >
-                      Cancel
-                    </Button>
-                  </div>
-                </form>
-              ) : (
-                <div className="mt-2 flex items-center justify-between rounded-md border bg-card p-3">
-                  <span className="text-foreground">
-                    {user?.name || "Not set"}
-                  </span>
-                  <Button variant="outline" onClick={editHandler}>
-                    Edit
-                  </Button>
-                </div>
-              )}
+              <EditableNameField value={user?.name} onSave={saveName} />
             </div>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

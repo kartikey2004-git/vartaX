@@ -5,7 +5,7 @@
 
 import React from "react";
 import { useEffect, useState } from "react";
-import Loading from "@/components/Loading";
+import ChatSkeleton from "@/components/ChatSkeleton";
 import { chat_service, useAppData, User } from "@/context/AppContext";
 import { useRouter } from "next/navigation";
 import ChatSideBar from "@/components/ChatSideBar";
@@ -412,7 +412,7 @@ const ChatApp = () => {
     };
   }, [typingTimeout]);
 
-  if (loading) return <Loading />;
+  if (loading) return <ChatSkeleton />;
 
   return (
     <div className="flex h-dvh bg-background text-foreground overflow-hidden">

@@ -1,0 +1,31 @@
+name: Frontend Render Health Check
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+
+jobs:
+  ping-health-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check Render services via ping-service
+        env:
+          PING_SERVICE_URL: https://vartax-4.onrender.com/ping-all
+        run: |
+          response=$(curl -sf --max-time 15 "$PING_SERVICE_URL") || {
+            echo "::error::ping-service itself did not respond at $PING_SERVICE_URL"
+            exit 1
+          }
+
+          echo "$response" | jq .
+
+          down_count=$(echo "$response" | jq '[.services[] | select(.alive == false)] | length')
+
+          if [ "$down_count" -gt 0 ]; then
+            echo "$response" | jq '.services[] | select(.alive == false)'
+            echo "::error::$down_count service(s) reported as down"
+            exit 1
+          fi
+
+          echo "All services healthy"

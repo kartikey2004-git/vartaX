@@ -7,9 +7,9 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { LogOut, Save, User, UserCircle } from "lucide-react";
+import { LogOut, UserCircle } from "lucide-react";
 import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
+import EditableNameField from "@/components/EditableNameField";
 import {
   Dialog,
   DialogContent,
@@ -26,20 +26,10 @@ interface ProfileDialogProps {
 
 const ProfileDialog = ({ children }: ProfileDialogProps) => {
   const { user, setUser, logoutUser } = useAppData();
-  const [isEdit, setIsEdit] = useState(false);
-  const [name, setName] = useState<string>("");
   const [open, setOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
 
-  const editHandler = () => {
-    setIsEdit(!isEdit);
-    setName(user?.name || "");
-  };
-
-  const submitHandler = async (e: any) => {
-    e.preventDefault();
+  const saveName = async (name: string) => {
     const token = Cookies.get("token");
-    setIsLoading(true);
     try {
       const { data } = await axios.post(
         `${user_service}/api/v1/user/update`,
@@ -59,11 +49,9 @@ const ProfileDialog = ({ children }: ProfileDialogProps) => {
 
       toast.success(data.message);
       setUser(data.user);
-      setIsEdit(false);
     } catch (error: any) {
-      toast.error(error.response.data.message);
-    } finally {
-      setIsLoading(false);
+      toast.error(error.response?.data?.message || "Something went wrong");
+      throw error;
     }
   };
 
@@ -89,7 +77,7 @@ const ProfileDialog = ({ children }: ProfileDialogProps) => {
               <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center">
                 <UserCircle className="w-10 h-10 text-muted-foreground" />
               </div>
-              <span className="absolute -bottom-0.5 -right-0.5 w-4 h-4 bg-green-500 rounded-full border-2 border-background" />
+              <span className="absolute -bottom-0.5 -right-0.5 w-4 h-4 bg-success rounded-full border-2 border-background" />
             </div>
 
             <div className="flex-1">
@@ -105,55 +93,11 @@ const ProfileDialog = ({ children }: ProfileDialogProps) => {
           <div className="space-y-4">
             <div>
               <Label className="text-foreground">Display Name</Label>
-
-              {isEdit ? (
-                <form onSubmit={submitHandler} className="mt-2 space-y-3">
-                  <div className="relative">
-                    <Input
-                      type="text"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      className="w-full pr-10"
-                      placeholder="Enter your name"
-                    />
-                    <User className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
-                  </div>
-
-                  <div className="flex items-center gap-2">
-                    <Button
-                      type="submit"
-                      size="sm"
-                      className="flex items-center gap-2"
-                      disabled={isLoading}
-                    >
-                      {isLoading ? (
-                        <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
-                      ) : (
-                        <Save className="w-4 h-4" />
-                      )}
-                      {isLoading ? "Saving..." : "Save"}
-                    </Button>
-
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      onClick={editHandler}
-                    >
-                      Cancel
-                    </Button>
-                  </div>
-                </form>
-              ) : (
-                <div className="flex items-center justify-between mt-2 p-3 rounded-md border">
-                  <span className="text-foreground">
-                    {user?.name || "Not set"}
-                  </span>
-                  <Button variant="outline" size="sm" onClick={editHandler}>
-                    Edit
-                  </Button>
-                </div>
-              )}
+              <EditableNameField
+                value={user?.name}
+                onSave={saveName}
+                size="sm"
+              />
             </div>
           </div>
         </div>

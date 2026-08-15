@@ -2,7 +2,7 @@
 import Image from "next/image";
 import React, { useState } from "react";
 import { Button } from "./ui/button";
-import { Loader2, Paperclip, Send, X } from "lucide-react";
+import { Paperclip, Send, X } from "lucide-react";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 
@@ -51,10 +51,12 @@ const MessageInput = ({
           />
           <Button
             type="button"
-            className="absolute -top-2 -right-2 bg-destructive hover:bg-destructive/95 rounded-full p-1"
+            variant="destructive"
+            size="icon"
+            className="absolute -top-2 -right-2 h-6 w-6 rounded-full"
             onClick={() => setImageFile(null)}
           >
-            <X className="w-4 h-4 text-white" />
+            <X className="w-4 h-4" />
           </Button>
         </div>
       )}
@@ -85,14 +87,11 @@ const MessageInput = ({
 
         <Button
           type="submit"
-          disabled={(!imageFile && !message) || isUploading}
-          className="flex items-center gap-1 rounded-md px-4 py-3 text-primary-foreground transition-colors disabled:cursor-not-allowed disabled:opacity-50"
+          loading={isUploading}
+          disabled={!imageFile && !message}
+          className="gap-1 px-4 py-3"
         >
-          {isUploading ? (
-            <Loader2 className="w-4 h-4 animate-spin" />
-          ) : (
-            <Send className="w-4 h-4" />
-          )}
+          {!isUploading && <Send className="w-4 h-4" />}
         </Button>
       </div>
     </form>

@@ -5,9 +5,10 @@
 import { User } from "@/context/AppContext";
 import React, { useState } from "react";
 import { Button } from "./ui/button";
-import { Plus, Search, UserCircle, X } from "lucide-react";
+import { MessageSquare, Plus, Search, UserCircle, X } from "lucide-react";
 import { Input } from "./ui/input";
 import ProfileDialog from "./ProfileDialog";
+import EmptyState from "./EmptyState";
 
 interface ChatSideBarProps {
   sidebarOpen: boolean;
@@ -88,37 +89,51 @@ const ChatSideBar = ({
 
       <div className="flex-1 overflow-y-auto scrollbar-hide">
         {showAllUsers ? (
-          <div className="space-y-0">
-            {users
-              ?.filter(
-                (user) =>
-                  user._id !== loggedInUser?._id &&
-                  user.name.toLowerCase().includes(searchQuery.toLowerCase()),
-              )
-              .map((u) => (
-                <div
-                  key={u._id}
-                  className="group mx-2 my-1 flex cursor-pointer items-center gap-3 rounded-md px-4 py-3 transition-colors hover:bg-accent"
-                  onClick={() => createChat(u)}
-                >
-                  <div className="relative w-11 h-11 rounded-full flex items-center justify-center group-hover:scale-105 transition-transform">
-                    <UserCircle className="w-6 h-6 text-muted-foreground" />
-                    {onlineUsers.includes(u._id) && (
-                      <span className="absolute top-6 right-0.5 w-3.5 h-3.5 rounded-full bg-green-500 border-2 border-background" />
-                    )}
-                  </div>
+          (() => {
+            const filteredUsers = users?.filter(
+              (user) =>
+                user._id !== loggedInUser?._id &&
+                user.name.toLowerCase().includes(searchQuery.toLowerCase()),
+            );
 
-                  <div className="flex-1 min-w-0">
-                    <p className="font-medium text-foreground truncate">
-                      {u.name}
-                    </p>
-                    <p className="text-xs text-muted-foreground mt-0.5">
-                      {onlineUsers.includes(u._id) ? "Online" : "Offline"}
-                    </p>
+            if (!filteredUsers || filteredUsers.length === 0) {
+              return (
+                <EmptyState
+                  icon={Search}
+                  title="No users found"
+                  description="Try a different search term"
+                />
+              );
+            }
+
+            return (
+              <div className="space-y-0">
+                {filteredUsers.map((u) => (
+                  <div
+                    key={u._id}
+                    className="group mx-2 my-1 flex cursor-pointer items-center gap-3 rounded-md px-4 py-3 transition-colors hover:bg-accent"
+                    onClick={() => createChat(u)}
+                  >
+                    <div className="relative w-11 h-11 rounded-full flex items-center justify-center group-hover:scale-105 transition-transform">
+                      <UserCircle className="w-6 h-6 text-muted-foreground" />
+                      {onlineUsers.includes(u._id) && (
+                        <span className="absolute top-6 right-0.5 w-3.5 h-3.5 rounded-full bg-success border-2 border-background" />
+                      )}
+                    </div>
+
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium text-foreground truncate">
+                        {u.name}
+                      </p>
+                      <p className="text-xs text-muted-foreground mt-0.5">
+                        {onlineUsers.includes(u._id) ? "Online" : "Offline"}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              ))}
-          </div>
+                ))}
+              </div>
+            );
+          })()
         ) : chats && chats.length > 0 ? (
           <div className="space-y-0">
             {chats.map((chat) => {
@@ -140,7 +155,7 @@ const ChatSideBar = ({
                   <div className="relative w-11 h-11 rounded-full flex items-center justify-center">
                     <UserCircle className="w-6 h-6 text-muted-foreground" />
                     {onlineUsers.includes(chat.user._id) && (
-                      <span className="absolute top-6 right-0.5 w-3.5 h-3.5 rounded-full bg-green-500 border-2 border-background" />
+                      <span className="absolute top-6 right-0.5 w-3.5 h-3.5 rounded-full bg-success border-2 border-background" />
                     )}
                   </div>
 
@@ -165,9 +180,12 @@ const ChatSideBar = ({
             })}
           </div>
         ) : (
-          <div className="flex flex-col items-center justify-center h-full text-center text-muted-foreground px-4">
-            <p className="text-lg font-medium">No chats yet</p>
-            <p className="mt-1 text-sm">Start a new chat to begin messaging</p>
+          <div className="flex h-full items-center justify-center">
+            <EmptyState
+              icon={MessageSquare}
+              title="No chats yet"
+              description="Start a new chat to begin messaging"
+            />
           </div>
         )}
       </div>

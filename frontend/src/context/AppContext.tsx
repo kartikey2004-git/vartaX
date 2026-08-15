@@ -128,6 +128,9 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
       setChats(data.chats);
     } catch (error) {
       console.log(error);
+      if (token) {
+        toast.error("Failed to load chats");
+      }
     }
   }
 
@@ -147,6 +150,9 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
       setUsers(data);
     } catch (error) {
       console.log(error);
+      if (token) {
+        toast.error("Failed to load users");
+      }
     }
   }
 
